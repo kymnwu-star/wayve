@@ -1,0 +1,134 @@
+.main {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 5%;
+}
+
+.container {
+  width: 100%;
+  max-width: 400px;
+  background-color: var(--surface);
+  border: 1px solid var(--surface-border);
+  border-radius: 12px;
+  padding: 3rem 2rem;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+  text-align: center;
+}
+
+.subtitle {
+  color: #ccc;
+  margin-top: 1rem;
+  margin-bottom: 2.5rem;
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  text-align: left;
+}
+
+.inputGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.inputGroup label {
+  font-size: 0.9rem;
+  color: var(--foreground);
+}
+
+.inputGroup input {
+  padding: 0.8rem 1rem;
+  border-radius: 6px;
+  border: 1px solid var(--surface-border);
+  background-color: rgba(11,14,20,0.5);
+  color: var(--foreground);
+  font-size: 1rem;
+  transition: border-color 0.3s ease;
+}
+
+.inputGroup input:focus, .inputGroup .select:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+
+.select {
+  padding: 0.8rem 1rem;
+  border-radius: 6px;
+  border: 1px solid var(--surface-border);
+  background-color: rgba(11,14,20,0.5);
+  color: var(--foreground);
+  font-size: 1rem;
+  transition: border-color 0.3s ease;
+  appearance: none;
+}
+
+.select option {
+  background-color: var(--surface);
+  color: var(--foreground);
+}
+
+.tabContainer {
+  display: flex;
+  margin-bottom: 2rem;
+  border-bottom: 1px solid var(--surface-border);
+}
+
+.tab {
+  flex: 1;
+  background: none;
+  border: none;
+  color: #aaa;
+  padding: 1rem;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: color 0.3s, border-bottom 0.3s;
+}
+
+.activeTab {
+  color: var(--accent);
+  border-bottom: 2px solid var(--accent);
+  font-weight: bold;
+}
+
+.actions {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.btnLogin, .btnSignup {
+  padding: 1rem;
+  border-radius: 6px;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btnLogin {
+  background-color: var(--accent);
+  color: var(--background);
+  border: none;
+}
+
+.btnLogin:hover {
+  background-color: var(--accent-hover);
+}
+
+.btnSignup {
+  background-color: transparent;
+  color: var(--accent);
+  border: 1px solid var(--accent);
+}
+
+.btnSignup:hover {
+  background-color: rgba(204, 255, 0, 0.1);
+}

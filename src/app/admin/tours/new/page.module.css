@@ -1,0 +1,102 @@
+.main {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: calc(100vh - 80px);
+  padding: 2rem;
+}
+
+.container {
+  width: 100%;
+  max-width: 600px;
+  background-color: rgba(11, 14, 20, 0.7);
+  backdrop-filter: blur(16px);
+  padding: 3rem;
+  border-radius: 20px;
+  border: 1px solid var(--surface-border);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+}
+
+.subtitle {
+  color: #aaa;
+  margin-bottom: 2rem;
+  font-size: 1.1rem;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.inputGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.inputGroup label {
+  font-weight: 500;
+  font-size: 0.95rem;
+  color: #ddd;
+}
+
+.inputGroup input, .inputGroup textarea, .inputGroup .select {
+  padding: 0.8rem 1rem;
+  border-radius: 6px;
+  border: 1px solid var(--surface-border);
+  background-color: rgba(11,14,20,0.5);
+  color: var(--foreground);
+  font-size: 1rem;
+  transition: border-color 0.3s ease;
+  font-family: inherit;
+}
+
+.inputGroup textarea {
+  min-height: 120px;
+  resize: vertical;
+}
+
+.inputGroup input:focus, .inputGroup textarea:focus, .inputGroup .select:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+
+.select {
+  appearance: none;
+}
+
+.select option {
+  background-color: var(--surface);
+  color: var(--foreground);
+}
+
+.actions {
+  margin-top: 1rem;
+}
+
+.btnSubmit {
+  width: 100%;
+  padding: 1rem;
+  border: none;
+  border-radius: 6px;
+  background-color: var(--accent);
+  color: #000;
+  font-weight: bold;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.1s;
+}
+
+.btnSubmit:hover:not(:disabled) {
+  background-color: #aadd00;
+}
+
+.btnSubmit:active:not(:disabled) {
+  transform: translateY(2px);
+}
+
+.btnSubmit:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
