@@ -22,7 +22,7 @@ export default async function NewTourPage({
     <main className={styles.main}>
       <div className={styles.container}>
         <h1 className="text-accent neon-glow" style={{ marginBottom: '1rem' }}>Register New Tour</h1>
-        <p className={styles.subtitle}>BUSAN WAVE의 프리미엄 독점 투어를 등록합니다.</p>
+        <p className={styles.subtitle}>BUSAN WAYVE의 프리미엄 독점 투어를 등록합니다.</p>
         
         <TourForm />
         
