@@ -1,13 +1,19 @@
 import Image from 'next/image';
 import Link from 'next/link';
+import { cookies } from 'next/headers';
 import styles from './page.module.css';
 
-export default function Home() {
+export default async function Home() {
+  const cookieStore = await cookies();
+  const waveRole = cookieStore.get('wave_role')?.value;
+
   return (
     <main className={styles.main}>
-      <Link href="/admin/tours/new" className={styles.floatingBtn}>
-        ➕ 투어상품 등록
-      </Link>
+      {waveRole === 'Partner' && (
+        <Link href="/admin/tours/new" className={styles.floatingBtn}>
+          ➕ 투어상품 등록
+        </Link>
+      )}
       
       {/* Hero Section */}
       <section className={styles.hero}>

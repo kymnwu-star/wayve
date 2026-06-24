@@ -3,18 +3,7 @@
 import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
 import { cookies } from 'next/headers'
-import { GoogleSpreadsheet } from 'google-spreadsheet'
-import { JWT } from 'google-auth-library'
-
-// 서비스 계정 인증 초기화
-function getGoogleSheet() {
-  const serviceAccountAuth = new JWT({
-    email: process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL,
-    key: process.env.GOOGLE_PRIVATE_KEY?.replace(/\\n/g, '\n').replace(/^"|"$/g, ''),
-    scopes: ['https://www.googleapis.com/auth/spreadsheets'],
-  });
-  return new GoogleSpreadsheet(process.env.GOOGLE_SHEET_ID!, serviceAccountAuth);
-}
+import { supabase } from '@/utils/supabase'
 
 export async function login(formData: FormData) {
   const email = formData.get('email') as string;
@@ -23,21 +12,64 @@ export async function login(formData: FormData) {
   let redirectUrl = '';
   
   try {
-    const doc = getGoogleSheet();
-    await doc.loadInfo();
-    const sheet = doc.sheetsByIndex[0];
-    const rows = await sheet.getRows();
-    const user = rows.find(row => row.get('Email') === email && row.get('Password') === password);
+    let userRole = '';
+    let foundUser = null;
 
-    if (user) {
+    // 1. 관광객 테이블 확인
+    const { data: tourists } = await supabase
+      .from('tourists')
+      .select('*')
+      .eq('email', email)
+      .eq('password', password);
+    
+    if (tourists && tourists.length > 0) {
+      foundUser = tourists[0];
+      userRole = 'Tourist';
+    }
+
+    // 2. 파트너 테이블 확인
+    if (!foundUser) {
+      const { data: partners } = await supabase
+        .from('partners')
+        .select('*')
+        .eq('email', email)
+        .eq('password', password);
+      
+      if (partners && partners.length > 0) {
+        foundUser = partners[0];
+        userRole = 'Partner';
+      }
+    }
+
+    // 3. 관리자 테이블 확인
+    if (!foundUser) {
+      const { data: admins } = await supabase
+        .from('admins')
+        .select('*')
+        .eq('email', email)
+        .eq('password', password);
+      
+      if (admins && admins.length > 0) {
+        foundUser = admins[0];
+        userRole = 'Admin';
+      }
+    }
+
+    if (foundUser) {
       const cookieStore = await cookies()
       cookieStore.set('wave_session', email, { maxAge: 60 * 60 * 24 })
-      redirectUrl = '/?login=success';
+      cookieStore.set('wave_role', userRole, { maxAge: 60 * 60 * 24 })
+      
+      if (userRole === 'Partner') {
+        redirectUrl = '/partner/dashboard';
+      } else {
+        redirectUrl = '/?login=success';
+      }
     } else {
       redirectUrl = `/login?message=${encodeURIComponent('이메일 또는 비밀번호가 올바르지 않습니다.')}`;
     }
   } catch (error) {
-    console.error('Google Sheets API Error:', error);
+    console.error('Supabase API Error (Login):', error);
     redirectUrl = `/login?message=${encodeURIComponent('백엔드 시스템 오류가 발생했습니다.')}`;
   }
 
@@ -45,16 +77,6 @@ export async function login(formData: FormData) {
     revalidatePath('/', 'layout');
   }
   redirect(redirectUrl);
-}
-
-async function initSheetAndCheckEmail(sheet: any, email: string) {
-  try {
-    await sheet.setHeaderRow(['Role', 'Email', 'Password', 'Gender', 'Country', 'TravelType', 'CompanyName', 'BusinessNumber', 'BusinessAddress', 'RepresentativeName', 'Industry', 'LiabilityAgreed', 'CreatedAt']);
-  } catch (e) {}
-
-  const rows = await sheet.getRows();
-  const existingUser = rows.find((row: any) => row.get('Email') === email);
-  return { rows, existingUser };
 }
 
 export async function signupTourist(formData: FormData) {
@@ -66,27 +88,25 @@ export async function signupTourist(formData: FormData) {
 
   let redirectUrl = '';
   try {
-    const doc = getGoogleSheet();
-    await doc.loadInfo();
-    const sheet = doc.sheetsByIndex[0];
-    
-    const { existingUser } = await initSheetAndCheckEmail(sheet, email);
-    if (existingUser) {
+    const { data: existingUser } = await supabase
+      .from('tourists')
+      .select('email')
+      .eq('email', email);
+
+    if (existingUser && existingUser.length > 0) {
       redirectUrl = `/login?message=${encodeURIComponent('이미 가입된 이메일입니다.')}`;
     } else {
-      await sheet.addRow({
-        Role: 'Tourist',
-        Email: email,
-        Password: password,
-        Gender: gender,
-        Country: country,
-        TravelType: travelType,
-        CreatedAt: new Date().toISOString()
-      });
+      await supabase.from('tourists').insert([{
+        email,
+        password,
+        gender,
+        country,
+        travel_type: travelType,
+      }]);
       redirectUrl = `/login?message=${encodeURIComponent('관광객 회원가입 완료! 로그인해주세요.')}`;
     }
   } catch (error) {
-    console.error('Google Sheets API Error:', error);
+    console.error('Supabase API Error (Tourist Signup):', error);
     redirectUrl = `/login?message=${encodeURIComponent('백엔드 시스템 오류가 발생했습니다.')}`;
   }
   redirect(redirectUrl);
@@ -104,30 +124,28 @@ export async function signupBusiness(formData: FormData) {
 
   let redirectUrl = '';
   try {
-    const doc = getGoogleSheet();
-    await doc.loadInfo();
-    const sheet = doc.sheetsByIndex[0];
-    
-    const { existingUser } = await initSheetAndCheckEmail(sheet, email);
-    if (existingUser) {
+    const { data: existingUser } = await supabase
+      .from('partners')
+      .select('email')
+      .eq('email', email);
+
+    if (existingUser && existingUser.length > 0) {
       redirectUrl = `/login?message=${encodeURIComponent('이미 가입된 이메일입니다.')}`;
     } else {
-      await sheet.addRow({
-        Role: 'Business',
-        Email: email,
-        Password: password,
-        CompanyName: companyName,
-        BusinessNumber: businessNumber,
-        BusinessAddress: businessAddress,
-        RepresentativeName: representativeName,
-        Industry: industry,
-        LiabilityAgreed: liabilityAgreed,
-        CreatedAt: new Date().toISOString()
-      });
+      await supabase.from('partners').insert([{
+        email,
+        password,
+        company_name: companyName,
+        business_number: businessNumber,
+        business_address: businessAddress,
+        representative_name: representativeName,
+        industry,
+        liability_agreed: liabilityAgreed,
+      }]);
       redirectUrl = `/login?message=${encodeURIComponent('기업 회원가입 완료! 로그인해주세요.')}`;
     }
   } catch (error) {
-    console.error('Google Sheets API Error:', error);
+    console.error('Supabase API Error (Business Signup):', error);
     redirectUrl = `/login?message=${encodeURIComponent('백엔드 시스템 오류가 발생했습니다.')}`;
   }
   redirect(redirectUrl);
@@ -138,7 +156,6 @@ export async function signupAdmin(formData: FormData) {
   const password = formData.get('password') as string;
   const adminCode = formData.get('adminCode') as string;
 
-  // 관리자 비밀코드 검증 (환경변수 또는 하드코딩)
   const expectedAdminCode = process.env.WAYVE_ADMIN_SECRET || '123456';
 
   let redirectUrl = '';
@@ -148,24 +165,22 @@ export async function signupAdmin(formData: FormData) {
   }
 
   try {
-    const doc = getGoogleSheet();
-    await doc.loadInfo();
-    const sheet = doc.sheetsByIndex[0];
-    
-    const { existingUser } = await initSheetAndCheckEmail(sheet, email);
-    if (existingUser) {
+    const { data: existingUser } = await supabase
+      .from('admins')
+      .select('email')
+      .eq('email', email);
+
+    if (existingUser && existingUser.length > 0) {
       redirectUrl = `/login?message=${encodeURIComponent('이미 가입된 이메일입니다.')}`;
     } else {
-      await sheet.addRow({
-        Role: 'Admin',
-        Email: email,
-        Password: password,
-        CreatedAt: new Date().toISOString()
-      });
+      await supabase.from('admins').insert([{
+        email,
+        password,
+      }]);
       redirectUrl = `/login?message=${encodeURIComponent('관리자 회원가입 완료! 로그인해주세요.')}`;
     }
   } catch (error) {
-    console.error('Google Sheets API Error:', error);
+    console.error('Supabase API Error (Admin Signup):', error);
     redirectUrl = `/login?message=${encodeURIComponent('백엔드 시스템 오류가 발생했습니다.')}`;
   }
   redirect(redirectUrl);

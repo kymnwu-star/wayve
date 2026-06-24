@@ -3,17 +3,7 @@
 import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
 import { cookies } from 'next/headers'
-import { GoogleSpreadsheet } from 'google-spreadsheet'
-import { JWT } from 'google-auth-library'
-
-function getGoogleSheet() {
-  const serviceAccountAuth = new JWT({
-    email: process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL,
-    key: process.env.GOOGLE_PRIVATE_KEY?.replace(/\\n/g, '\n'),
-    scopes: ['https://www.googleapis.com/auth/spreadsheets'],
-  });
-  return new GoogleSpreadsheet(process.env.GOOGLE_SHEET_ID!, serviceAccountAuth);
-}
+import { supabase } from '@/utils/supabase'
 
 export async function createTour(formData: FormData) {
   // 1. 로그인 여부 확인
@@ -36,32 +26,20 @@ export async function createTour(formData: FormData) {
   let redirectUrl = '';
 
   try {
-    const doc = getGoogleSheet();
-    await doc.loadInfo();
-    
-    // Tours 시트 찾기, 없으면 생성
-    let sheet = doc.sheetsByTitle['Tours'];
-    if (!sheet) {
-      sheet = await doc.addSheet({ title: 'Tours' });
-      await sheet.setHeaderRow(['Title', 'Description', 'Price', 'Duration', 'MaxCapacity', 'Category', 'ImageUrl', 'CreatedAt', 'CreatedBy']);
-    }
+    // 3. Supabase products 테이블에 임시 삽입
+    // (투어 테이블을 따로 안 만들었으므로 products에 우회 저장)
+    const { error } = await supabase.from('products').insert([{
+      title,
+      competitor_url: imageUrl || 'ADMIN_TOUR',
+      competitor_price: parseInt(price, 10),
+      wayve_price: parseInt(price, 10),
+    }]);
 
-    // 데이터 추가
-    await sheet.addRow({
-      Title: title,
-      Description: description,
-      Price: price,
-      Duration: duration,
-      MaxCapacity: maxCapacity,
-      Category: category,
-      ImageUrl: imageUrl,
-      CreatedAt: new Date().toISOString(),
-      CreatedBy: session.value // 등록자 이메일
-    });
+    if (error) throw error;
 
     redirectUrl = `/admin/tours/new?message=${encodeURIComponent('투어 상품이 성공적으로 등록되었습니다!')}`;
   } catch (error) {
-    console.error('Google Sheets API Error (Tours):', error);
+    console.error('Supabase API Error (Tours):', error);
     redirectUrl = `/admin/tours/new?message=${encodeURIComponent('투어 등록에 실패했습니다. 관리자에게 문의하세요.')}`;
   }
 

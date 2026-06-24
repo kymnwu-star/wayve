@@ -74,6 +74,7 @@
   font-weight: 700;
   color: white;
   margin-bottom: 0.5rem;
+  word-break: keep-all;
 }
 
 .location {
@@ -88,6 +89,7 @@
   color: #a0a0a0;
   line-height: 1.6;
   font-size: 1.05rem;
+  word-break: keep-all;
 }
 
 .actionArea {
@@ -101,6 +103,7 @@
   color: white;
   margin-bottom: 1rem;
   display: block;
+  white-space: nowrap;
 }
 
 .reserveBtn {
@@ -114,6 +117,7 @@
   cursor: pointer;
   transition: all 0.3s ease;
   box-shadow: 0 4px 15px rgba(212, 255, 0, 0.3);
+  white-space: nowrap;
 }
 
 .reserveBtn:hover {
@@ -254,11 +258,14 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+    gap: 10px;
   }
   .price {
     margin-bottom: 0;
+    font-size: 1.2rem;
   }
   .reserveBtn {
-    padding: 0.8rem 1.5rem;
+    padding: 0.8rem 1.2rem;
+    font-size: 1rem;
   }
 }

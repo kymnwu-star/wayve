@@ -1,0 +1,201 @@
+.main {
+  min-height: 100vh;
+  padding: 120px 5% 5rem;
+  background-color: var(--background);
+  color: var(--foreground);
+}
+
+.container {
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.header {
+  margin-bottom: 3rem;
+}
+
+.title {
+  font-size: 2.5rem;
+  font-weight: 900;
+  letter-spacing: -0.02em;
+}
+
+.subtitle {
+  color: #a0a0a0;
+  margin-top: 0.5rem;
+  font-size: 1.1rem;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 350px;
+  gap: 2rem;
+}
+
+.formCard {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 20px;
+  padding: 2.5rem;
+  backdrop-filter: blur(10px);
+}
+
+.formGroup {
+  margin-bottom: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.label {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #d0d0d0;
+  display: flex;
+  justify-content: space-between;
+}
+
+.required {
+  color: var(--accent);
+}
+
+.input {
+  width: 100%;
+  padding: 1rem;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(0, 0, 0, 0.2);
+  color: white;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+}
+
+.input:focus {
+  outline: none;
+  border-color: var(--accent);
+  background: rgba(0, 0, 0, 0.4);
+}
+
+.inputError {
+  border-color: #F44336;
+}
+
+.errorMessage {
+  color: #F44336;
+  font-size: 0.85rem;
+  margin-top: 0.3rem;
+}
+
+.infoMessage {
+  color: var(--accent);
+  font-size: 0.85rem;
+  margin-top: 0.3rem;
+}
+
+.submitBtn {
+  width: 100%;
+  padding: 1.2rem;
+  border-radius: 12px;
+  border: none;
+  background-color: var(--accent);
+  color: #000;
+  font-weight: 700;
+  font-size: 1.1rem;
+  cursor: pointer;
+  margin-top: 1rem;
+  transition: all 0.3s ease;
+}
+
+.submitBtn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(212, 255, 0, 0.3);
+}
+
+.submitBtn:disabled {
+  background-color: #555;
+  color: #888;
+  cursor: not-allowed;
+}
+
+/* Margin Simulator */
+.simulatorCard {
+  background: linear-gradient(145deg, rgba(20,25,35,1) 0%, rgba(10,15,20,1) 100%);
+  border: 1px solid rgba(212, 255, 0, 0.2);
+  border-radius: 20px;
+  padding: 2rem;
+  height: fit-content;
+  position: sticky;
+  top: 120px;
+}
+
+.simTitle {
+  font-size: 1.2rem;
+  font-weight: 700;
+  margin-bottom: 1.5rem;
+  color: white;
+  text-align: center;
+}
+
+.simRow {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.simRow:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+
+.simLabel {
+  color: #a0a0a0;
+  font-size: 0.9rem;
+}
+
+.simValue {
+  font-weight: 600;
+  font-size: 1.1rem;
+}
+
+.simValue.negative {
+  color: #F44336;
+}
+
+.simValue.positive {
+  color: var(--accent);
+  font-size: 1.5rem;
+  font-weight: 900;
+}
+
+.simResultBox {
+  margin-top: 1.5rem;
+  padding: 1.5rem;
+  background: rgba(212, 255, 0, 0.1);
+  border-radius: 12px;
+  text-align: center;
+}
+
+.simResultTitle {
+  display: block;
+  font-size: 0.9rem;
+  color: #d0d0d0;
+  margin-bottom: 0.5rem;
+}
+
+.simResultAmount {
+  font-size: 2rem;
+  font-weight: 900;
+  color: var(--accent);
+}
+
+@media (max-width: 900px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+  .simulatorCard {
+    position: static;
+  }
+}

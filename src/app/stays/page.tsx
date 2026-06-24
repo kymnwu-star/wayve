@@ -10,7 +10,7 @@ const accommodations = [
     id: 1,
     name: '파노라마 오션 펜트하우스',
     location: '해운대 마린시티',
-    description: '눈앞에 펼쳐지는 180도 광안대교 뷰. 최고급 구스 침구와 프리미엄 어메니티, 프라이빗 인피니티 풀이 준비된 하이엔드 펜트하우스입니다.',
+    description: '눈앞에 펼쳐지는 180도 광안대교 뷰. 최고급 구스 침구와 고급 어메니티, 프라이빗 인피니티 풀이 준비된 펜트하우스입니다.',
     price: '₩850,000 / night',
     imageUrl: 'https://images.unsplash.com/photo-1566073771259-6a8506099945?q=80&w=1200'
   },
@@ -67,7 +67,7 @@ export default function AccommodationPage() {
     <main className={styles.main}>
       <div className={styles.container}>
         <div className={styles.headerArea}>
-          <h1 className={`${styles.title} text-accent neon-glow`}>Premium Stays</h1>
+          <h1 className={`${styles.title} text-accent neon-glow`}>Stays</h1>
           <p className={styles.subtitle}>웨이브가 엄선한 부산의 가장 은밀하고 완벽한 휴식처</p>
         </div>
 

@@ -37,6 +37,12 @@ export default function LoginForm() {
             {isPending ? 'Processing...' : 'Log in'}
           </button>
         </div>
+
+        <div style={{ textAlign: 'center', marginTop: '1rem' }}>
+          <Link href="/forgot-password" style={{ color: '#a0a0a0', fontSize: '0.85rem', textDecoration: 'underline' }}>
+            비밀번호를 잊으셨나요?
+          </Link>
+        </div>
       </form>
 
       <div className={styles.signupLinks}>
