@@ -114,3 +114,14 @@
   transform: translateY(-3px);
   background-color: #aadd00;
 }
+
+@media (max-width: 768px) {
+  .heroContent h2 {
+    font-size: 2rem;
+    white-space: nowrap;
+  }
+  .heroContent h1 {
+    font-size: 1.6rem;
+    white-space: nowrap;
+  }
+}

@@ -1,0 +1,220 @@
+.floatingBtn {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  background-color: var(--surface);
+  border: 1px solid var(--accent);
+  color: white;
+  padding: 0.8rem 1.2rem;
+  border-radius: 50px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.4);
+  transition: all 0.3s ease;
+  z-index: 999;
+}
+
+.floatingBtn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 15px 30px rgba(204, 255, 0, 0.2);
+  background-color: rgba(204, 255, 0, 0.1);
+}
+
+.floatingBtn.hidden {
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(20px);
+}
+
+.icon {
+  font-size: 1.2rem;
+}
+
+.text {
+  font-weight: bold;
+  font-size: 0.95rem;
+  letter-spacing: 0.05em;
+}
+
+.chatWindow {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  width: 350px;
+  height: 500px;
+  background-color: var(--background);
+  border: 1px solid var(--surface-border);
+  border-radius: 16px;
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.6);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  z-index: 1000;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(20px) scale(0.95);
+  transform-origin: bottom right;
+  transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+.chatWindow.open {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateY(0) scale(1);
+}
+
+.header {
+  background-color: var(--surface);
+  padding: 1.2rem;
+  border-bottom: 1px solid var(--surface-border);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.headerTitle {
+  font-weight: bold;
+  font-size: 1.1rem;
+  color: var(--accent);
+}
+
+.headerSubtitle {
+  font-size: 0.8rem;
+  color: #888;
+  margin-top: 0.2rem;
+}
+
+.closeBtn {
+  background: transparent;
+  border: none;
+  color: #888;
+  font-size: 1.2rem;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+
+.closeBtn:hover {
+  color: white;
+}
+
+.messageArea {
+  flex: 1;
+  padding: 1.5rem;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+}
+
+.messageArea::-webkit-scrollbar {
+  width: 6px;
+}
+.messageArea::-webkit-scrollbar-thumb {
+  background-color: var(--surface-border);
+  border-radius: 3px;
+}
+
+.messageWrapper {
+  display: flex;
+  gap: 0.8rem;
+  max-width: 85%;
+}
+
+.messageWrapper.ai {
+  align-self: flex-start;
+}
+
+.messageWrapper.user {
+  align-self: flex-end;
+  flex-direction: row-reverse;
+}
+
+.avatar {
+  background-color: var(--surface);
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  flex-shrink: 0;
+  border: 1px solid var(--surface-border);
+}
+
+.messageBubble {
+  background-color: var(--surface);
+  padding: 0.8rem 1rem;
+  border-radius: 12px;
+  font-size: 0.95rem;
+  line-height: 1.5;
+  color: #ddd;
+  word-break: keep-all;
+}
+
+.messageWrapper.user .messageBubble {
+  background-color: var(--accent);
+  color: black;
+  border-bottom-right-radius: 2px;
+}
+
+.messageWrapper.ai .messageBubble {
+  border-bottom-left-radius: 2px;
+  border: 1px solid var(--surface-border);
+}
+
+.inputArea {
+  padding: 1rem;
+  background-color: var(--surface);
+  border-top: 1px solid var(--surface-border);
+  display: flex;
+  gap: 0.5rem;
+}
+
+.input {
+  flex: 1;
+  background-color: var(--background);
+  border: 1px solid var(--surface-border);
+  color: white;
+  padding: 0.8rem 1rem;
+  border-radius: 20px;
+  outline: none;
+  font-size: 0.95rem;
+  transition: border-color 0.2s;
+}
+
+.input:focus {
+  border-color: var(--accent);
+}
+
+.sendBtn {
+  background-color: var(--accent);
+  color: black;
+  border: none;
+  border-radius: 20px;
+  padding: 0 1.2rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.sendBtn:disabled {
+  background-color: var(--surface-border);
+  color: #888;
+  cursor: not-allowed;
+}
+
+@media (max-width: 480px) {
+  .chatWindow {
+    width: calc(100% - 2rem);
+    height: 80vh;
+    bottom: 1rem;
+    right: 1rem;
+  }
+  .floatingBtn {
+    bottom: 1rem;
+    right: 1rem;
+  }
+}

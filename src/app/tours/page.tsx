@@ -34,6 +34,16 @@ const dummyTours = [
     duration: '4시간',
     imageUrl: 'https://jasonteale.com/blog/wp-content/uploads/2021/02/D79A3022_AuroraHDR2019-edit-1200x600.jpg',
   },
+  {
+    id: 10,
+    category: 'Marine Cruise',
+    icon: '🚢',
+    title: '태종대 히든 코스트 탐험',
+    description: '일반 관광객은 접근할 수 없는 태종대 절벽 아래 숨겨진 해안 동굴을 소형 보트로 탐험하는 어드벤처 투어.',
+    price: '95,000',
+    duration: '2.5시간',
+    imageUrl: 'https://jasonteale.com/blog/wp-content/uploads/2021/02/D79A3022_AuroraHDR2019-edit-1200x600.jpg',
+  },
 
   // Boutique Coffee
   {
@@ -64,6 +74,16 @@ const dummyTours = [
     description: '세월이 멈춘 듯한 온천장의 오래된 다관에서, 로컬 디저트 장인이 직접 구운 다과와 함께하는 심야 티 페어링 투어.',
     price: '55,000',
     duration: '2.5시간',
+    imageUrl: 'https://www.lemon8-app.com/jins_taste/7339793132049007106?region=kr',
+  },
+  {
+    id: 11,
+    category: 'Boutique Coffee',
+    icon: '☕',
+    title: '해리단길 프라이빗 티 오마카세',
+    description: '부산 로컬 식재료를 베이스로 우려낸 프리미엄 차와 이에 페어링되는 디저트를 즐기는 하이엔드 티 오마카세.',
+    price: '70,000',
+    duration: '2시간',
     imageUrl: 'https://www.lemon8-app.com/jins_taste/7339793132049007106?region=kr',
   },
 
@@ -97,6 +117,16 @@ const dummyTours = [
     price: '50,000',
     duration: '2.5시간',
     imageUrl: 'https://ak-d.tripcdn.com/sl/app/d1/20210204/a933f7c4627b4b10b0b8efebdf9168f1_1000.jpg',
+  },
+  {
+    id: 12,
+    category: 'Night Exploration',
+    icon: '🌙',
+    title: '광안대교 언더브릿지 야간 요트',
+    description: '화려한 광안대교 아래를 직접 통과하며, 오직 배 위에서만 볼 수 있는 은밀하고 압도적인 빛의 향연을 감상합니다.',
+    price: '75,000',
+    duration: '2시간',
+    imageUrl: 'https://ak-d.tripcdn.com/sl/app/d1/20210204/a933f7c4627b4b10b0b8efebdf9168f1_1000.jpg',
   }
 ];
 
@@ -120,10 +150,14 @@ export default function ToursPage() {
             </div>
             
             <div className={styles.grid}>
-              {categoryTours.map((tour) => (
+              {categoryTours.slice(0, 4).map((tour, index) => (
                 <div key={tour.id} className={styles.card}>
-                  {/* next/image 대신 img 태그 사용 (외부 이미지 호스트 제한 회피 위해 임시) */}
                   <div className={styles.imageWrapper}>
+                    {index === 3 && (
+                      <div className={styles.moreOverlay}>
+                        <span>+more</span>
+                      </div>
+                    )}
                     <img 
                       src={tour.imageUrl} 
                       alt={tour.title}

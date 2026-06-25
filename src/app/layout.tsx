@@ -2,7 +2,9 @@ import type { Metadata } from "next";
 import { Inter, Outfit } from "next/font/google";
 import Link from "next/link";
 import { cookies } from "next/headers";
-import { logout } from "./logout/actions";
+import SidebarMenu from "@/components/SidebarMenu";
+import Footer from "@/components/Footer";
+import AIAssistant from "@/components/AIAssistant";
 import "./globals.css";
 
 const inter = Inter({ subsets: ["latin"], variable: '--font-sans' });
@@ -20,6 +22,7 @@ export default async function RootLayout({
 }>) {
   const cookieStore = await cookies();
   const session = cookieStore.get('wave_session');
+  const role = cookieStore.get('wave_role');
   const isLoggedIn = !!session?.value;
 
   return (
@@ -28,20 +31,27 @@ export default async function RootLayout({
         <header className="main-header">
           <Link href="/" className="logo text-accent" style={{ textDecoration: 'none' }}>BUSAN WAYVE</Link>
           <nav>
-            <Link href="/travelogue">Travelogue</Link>
-            <Link href="/tours">Tours</Link>
-            <Link href="#">Magazine</Link>
-            <Link href="/stays">Stays</Link>
+            <Link href="#" className="search-btn" aria-label="Search">
+              <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <circle cx="11" cy="11" r="8"></circle>
+                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+              </svg>
+            </Link>
+            <Link href="/travelogue" style={{ fontWeight: 'bold' }}>Log</Link>
+            <Link href="/tours" style={{ fontWeight: 'bold' }}>Tours</Link>
+            <Link href="/magazine" style={{ fontWeight: 'bold' }}>Magazine</Link>
+            <Link href="/stays" style={{ fontWeight: 'bold' }}>Stays</Link>
+            <Link href="/shop" style={{ fontWeight: 'bold' }}>Shop</Link>
             {isLoggedIn ? (
-              <form action={logout} style={{ display: 'inline' }}>
-                <button type="submit" className="btn-login" style={{ cursor: 'pointer', background: 'transparent' }}>Logout</button>
-              </form>
+              <SidebarMenu role={role?.value || null} email={session?.value || null} />
             ) : (
               <Link href="/login" className="btn-login">Login</Link>
             )}
           </nav>
         </header>
         {children}
+        <Footer />
+        <AIAssistant />
       </body>
     </html>
   );
