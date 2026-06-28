@@ -4,10 +4,11 @@ import styles from '../page.module.css';
 
 // URL 파라미터를 실제 카테고리 이름으로 변환하는 유틸리티
 function getCategoryName(slug: string) {
-  if (slug === 'marine-cruise') return 'Marine Cruise';
-  if (slug === 'boutique-coffee') return 'Boutique Coffee';
-  if (slug === 'night-exploration') return 'Night Exploration';
-  return slug;
+  const decoded = decodeURIComponent(slug);
+  if (decoded === '투어&액티비티' || decoded.includes('투어')) return '투어&액티비티';
+  if (decoded === '티켓') return '티켓';
+  if (decoded === 'stay') return 'stay';
+  return decoded;
 }
 
 export default async function CategoryPage({
@@ -20,22 +21,22 @@ export default async function CategoryPage({
   const categoryName = getCategoryName(categorySlug);
 
   // 카테고리별 아이콘
-  let icon = '🚢';
-  if (categoryName === 'Boutique Coffee') icon = '☕';
-  if (categoryName === 'Night Exploration') icon = '🌙';
+  let icon = '🎯';
+  if (categoryName === '티켓') icon = '🎫';
+  if (categoryName === 'stay') icon = '🏨';
 
   // 12개의 더미 데이터 생성
   const tours = Array.from({ length: 12 }, (_, i) => ({
     id: i + 1,
-    title: `${categoryName} 스페셜 투어 ${i + 1}`,
-    description: `${categoryName}만의 특별한 경험을 제공하는 프라이빗 로컬 투어입니다. 누구나 가는 곳이 아닌, 진짜 부산의 얼굴을 만나보세요.`,
+    title: `${categoryName} 프리미엄 ${i + 1}`,
+    description: `${categoryName}만의 특별한 경험. 진짜 부산의 얼굴을 만나보세요.`,
     price: `${(50 + (i % 5) * 10).toLocaleString()},000`,
-    duration: `${2 + (i % 3)}시간`,
-    imageUrl: categoryName === 'Marine Cruise' 
+    duration: categoryName === 'stay' ? '1박' : '자유',
+    imageUrl: categoryName === '투어&액티비티' 
       ? 'https://images.unsplash.com/photo-1546874177-9e664107314e?q=80&w=800'
-      : categoryName === 'Boutique Coffee'
-      ? 'https://images.unsplash.com/photo-1603525281488-8422731cde7e?q=80&w=800'
-      : 'https://images.unsplash.com/photo-1512453979798-5ea266f8880c?q=80&w=800'
+      : categoryName === '티켓'
+      ? 'https://images.unsplash.com/photo-1546412414-8035e1776c9a?q=80&w=800'
+      : 'https://images.unsplash.com/photo-1582719508461-905c673771fd?q=80&w=800'
   }));
 
   return (

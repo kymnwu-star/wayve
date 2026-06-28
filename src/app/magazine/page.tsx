@@ -11,7 +11,7 @@ export default async function MagazinePage() {
     title: '영도 대평동: 멈춰진 시간 속을 걷다',
     editor: 'WAYVE Editorial Team',
     date: '2026. 06. 24',
-    imageUrl: 'https://images.unsplash.com/photo-1512453979798-5ea266f8880c?q=80&w=800',
+    imageUrl: '/images/daepyeong_night.jpg',
     content: `
       영도다리를 건너면 닿는 대평동은 수십 년 전의 흔적이 고스란히 남아있는 특별한 공간입니다. 
       '깡깡이 예술마을'로도 불리는 이곳은 예전 수리조선소에서 배 표면의 녹을 벗겨내는 망치질 소리에서 유래했습니다.

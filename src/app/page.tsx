@@ -42,6 +42,25 @@ export default async function Home() {
           <p>
             규격화된 대량 생산 관광 정보는 뒤로 밀어내고, 영도의 오래된 철공소 골목길과 바다 내음 짙은 밤 풍경을 예술적인 구도로 전면에 앞세웁니다.
           </p>
+          
+          {/* Smaller Categorization under Hero Text */}
+          <div className={styles.heroGrid}>
+            <div className={styles.heroCard}>
+              <div className={styles.heroIconWrapper}>🎯</div>
+              <h3>투어&액티비티</h3>
+              <p>전문 가이드와 함께하는 투어와 다이나믹한 액티비티 경험.</p>
+            </div>
+            <div className={styles.heroCard}>
+              <div className={styles.heroIconWrapper}>🎫</div>
+              <h3>티켓</h3>
+              <p>부산의 핫플레이스와 전시, 어트랙션을 스마트하게 즐기는 방법.</p>
+            </div>
+            <div className={styles.heroCard}>
+              <div className={styles.heroIconWrapper}>🏨</div>
+              <h3>stay</h3>
+              <p>프리미엄 호텔부터 감성 넘치는 로컬 숙소까지 완벽한 휴식.</p>
+            </div>
+          </div>
         </div>
       </section>
 
@@ -51,7 +70,7 @@ export default async function Home() {
         <Link href="/magazine" className={styles.magazineCard}>
           <div className={styles.magazineImage}>
             <Image 
-              src="https://images.unsplash.com/photo-1512453979798-5ea266f8880c?q=80&w=800"
+              src="/images/daepyeong_night.jpg"
               alt="영도 대평동"
               fill
               style={{ objectFit: 'cover' }}
@@ -71,27 +90,7 @@ export default async function Home() {
         </Link>
       </section>
 
-      {/* Mood Filter / Premium Categorization */}
-      <section className={styles.categorization}>
-        <h2 className={styles.sectionTitle}>Premium Categorization</h2>
-        <div className={styles.grid}>
-          <div className={styles.card}>
-            <div className={styles.iconWrapper}>🎯</div>
-            <h3>투어&액티비티</h3>
-            <p>전문 가이드와 함께하는 특별한 로컬 투어와 다이나믹한 액티비티 경험.</p>
-          </div>
-          <div className={styles.card}>
-            <div className={styles.iconWrapper}>🎫</div>
-            <h3>티켓</h3>
-            <p>부산의 핫플레이스와 전시, 어트랙션을 가장 스마트하게 즐기는 방법.</p>
-          </div>
-          <div className={styles.card}>
-            <div className={styles.iconWrapper}>🏨</div>
-            <h3>stay</h3>
-            <p>바다 전망의 프리미엄 호텔부터 감성 넘치는 로컬 숙소까지 완벽한 휴식.</p>
-          </div>
-        </div>
-      </section>
+
 
       {/* 무한 스크롤 장소 갤러리 */}
       <LocationMarquee />
