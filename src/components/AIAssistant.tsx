@@ -12,7 +12,7 @@ interface Message {
 export default function AIAssistant() {
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState<Message[]>([
-    { id: 1, text: '안녕하세요! 부산 웨이브 AI 어시스턴트입니다. 무엇을 도와드릴까요?', isUser: false }
+    { id: 1, text: '안녕하세요! 부산 웨이브 로컬 컨시어지입니다. 무엇을 도와드릴까요?', isUser: false }
   ]);
   const [inputText, setInputText] = useState('');
   const messagesEndRef = useRef<HTMLDivElement>(null);
@@ -49,14 +49,14 @@ export default function AIAssistant() {
         onClick={() => setIsOpen(true)}
       >
         <span className={styles.icon}>✨</span>
-        <span className={styles.text}>AI Assistant</span>
+        <span className={styles.text}>wayve</span>
       </button>
 
       <div className={`${styles.chatWindow} ${isOpen ? styles.open : ''}`}>
         <div className={styles.header}>
           <div>
-            <div className={styles.headerTitle}>WAYVE AI</div>
-            <div className={styles.headerSubtitle}>Powered by AI</div>
+            <div className={styles.headerTitle}>WAYVE</div>
+            <div className={styles.headerSubtitle}>Local Guide</div>
           </div>
           <button className={styles.closeBtn} onClick={() => setIsOpen(false)}>✕</button>
         </div>

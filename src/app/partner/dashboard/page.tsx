@@ -1,7 +1,11 @@
 import Link from 'next/link';
 import styles from './page.module.css';
+import { supabase } from '@/utils/supabase';
+import { revalidatePath } from 'next/cache';
 
-// Mock data for initial rendering (To be replaced with Supabase)
+export const revalidate = 0;
+
+// Mock data for initial rendering
 const mockSales = 45000000; // 4,500만원
 const OTHER_PLATFORM_FEE = 0.15; // 15%
 const WAYVE_FEE = 0.03; // 3%
@@ -15,26 +19,53 @@ const mockSettlements = [
     amount: 850000,
     timeRemaining: '14:25:00',
     date: '2026-06-24'
-  },
-  {
-    id: 'S-1002',
-    productName: '해운대 로컬 미식 투어',
-    status: 'suspended',
-    amount: 120000,
-    timeRemaining: 'Suspended (Refund Requested)',
-    date: '2026-06-23'
-  },
-  {
-    id: 'S-1003',
-    productName: '기장 서핑 마스터 클래스',
-    status: 'completed',
-    amount: 2100000,
-    timeRemaining: '정산 완료',
-    date: '2026-06-21'
   }
 ];
 
-export default function PartnerDashboard() {
+export default async function PartnerDashboard() {
+  // Fetch pending bids
+  let pendingBids: any[] = [];
+  try {
+    const { data } = await supabase
+      .from('bidding_requests')
+      .select('*, tours(title)')
+      .eq('status', 'pending')
+      .order('created_at', { ascending: false });
+    
+    if (data) pendingBids = data;
+  } catch (err) {
+    console.error('Error fetching bids:', err);
+  }
+
+  // Server Actions for Accept/Reject
+  async function acceptBid(formData: FormData) {
+    'use server';
+    const bidId = formData.get('bidId') as string;
+    const tourId = formData.get('tourId') as string;
+    const bidDate = formData.get('bidDate') as string;
+    const bidTime = formData.get('bidTime') as string;
+
+    // 1. Accept this bid
+    await supabase.from('bidding_requests').update({ status: 'accepted' }).eq('id', bidId);
+
+    // 2. Reject all other pending bids for the same tour, date, and time (Transaction Lock simulation)
+    await supabase.from('bidding_requests')
+      .update({ status: 'rejected' })
+      .eq('tour_id', tourId)
+      .eq('bid_date', bidDate)
+      .eq('bid_time', bidTime)
+      .eq('status', 'pending');
+
+    revalidatePath('/partner/dashboard');
+  }
+
+  async function rejectBid(formData: FormData) {
+    'use server';
+    const bidId = formData.get('bidId') as string;
+    await supabase.from('bidding_requests').update({ status: 'rejected' }).eq('id', bidId);
+    revalidatePath('/partner/dashboard');
+  }
+
   return (
     <main className={styles.main}>
       <div className={styles.container}>
@@ -49,7 +80,39 @@ export default function PartnerDashboard() {
         </div>
 
         <div className={styles.dashboardGrid}>
-          {/* 상생 지표 (절감액) */}
+          {/* Incoming Bids Section */}
+          <div className={`${styles.card} ${styles.bidsSection}`} style={{ gridColumn: '1 / -1' }}>
+            <h3 className={styles.cardTitle}>새로운 입찰 제안 (Bidding Requests)</h3>
+            {pendingBids.length === 0 ? (
+              <p style={{color: '#888'}}>현재 대기 중인 입찰이 없습니다.</p>
+            ) : (
+              <div className={styles.bidsList}>
+                {pendingBids.map(bid => (
+                  <div key={bid.id} className={styles.bidItem}>
+                    <div className={styles.bidInfo}>
+                      <h4>{bid.tours?.title || '알 수 없는 투어'}</h4>
+                      <p>일정: {bid.bid_date} | {bid.bid_time}</p>
+                      <p>제시 가격: <strong style={{color: 'var(--accent)', fontSize: '1.2rem'}}>₩{bid.bid_price.toLocaleString()}</strong></p>
+                    </div>
+                    <div className={styles.bidActions}>
+                      <form action={acceptBid} style={{display: 'inline'}}>
+                        <input type="hidden" name="bidId" value={bid.id} />
+                        <input type="hidden" name="tourId" value={bid.tour_id} />
+                        <input type="hidden" name="bidDate" value={bid.bid_date} />
+                        <input type="hidden" name="bidTime" value={bid.bid_time} />
+                        <button type="submit" className={styles.acceptBtn}>수락 (Accept)</button>
+                      </form>
+                      <form action={rejectBid} style={{display: 'inline'}}>
+                        <input type="hidden" name="bidId" value={bid.id} />
+                        <button type="submit" className={styles.rejectBtn}>거절 (Reject)</button>
+                      </form>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+
           <div className={`${styles.card} ${styles.savingsCard}`}>
             <h3 className={styles.cardTitle}>타 플랫폼 대비 누적 절감 수수료</h3>
             <div className={styles.savingsAmount}>
@@ -69,27 +132,6 @@ export default function PartnerDashboard() {
           <div className={`${styles.card} ${styles.statCard}`}>
             <h3 className={styles.cardTitle}>진행 중인 투어</h3>
             <div className={styles.statValue}>14건</div>
-          </div>
-
-          {/* 정산 타임라인 */}
-          <div className={`${styles.card} ${styles.settlementSection}`}>
-            <h3 className={styles.cardTitle}>초고속 48시간 정산 현황</h3>
-            <div className={styles.timelineList}>
-              {mockSettlements.map((item) => (
-                <div key={item.id} className={`${styles.timelineItem} ${styles[item.status]}`}>
-                  <div className={styles.itemInfo}>
-                    <h4>{item.productName}</h4>
-                    <p>예약 번호: {item.id} | 투어 일자: {item.date}</p>
-                  </div>
-                  <div className={styles.itemStatus}>
-                    <span className={styles.amount}>₩{item.amount.toLocaleString()}</span>
-                    <span className={`${styles.timer} ${styles[item.status]}`}>
-                      {item.timeRemaining}
-                    </span>
-                  </div>
-                </div>
-              ))}
-            </div>
           </div>
         </div>
       </div>

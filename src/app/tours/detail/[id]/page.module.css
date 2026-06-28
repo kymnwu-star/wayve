@@ -1,0 +1,85 @@
+.main {
+  padding: 8rem 5% 5rem 5%;
+  min-height: 100vh;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.layout {
+  display: flex;
+  gap: 3rem;
+  margin-top: 2rem;
+}
+
+.imageSection {
+  flex: 1.5;
+  position: relative;
+  height: 500px;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.infoSection {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.category {
+  color: var(--accent);
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  font-size: 0.9rem;
+  margin-bottom: 0.5rem;
+}
+
+.title {
+  font-size: 2.5rem;
+  margin-bottom: 1.5rem;
+  line-height: 1.2;
+}
+
+.price {
+  font-size: 1.8rem;
+  font-weight: bold;
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--surface-border);
+}
+
+.description {
+  color: #ccc;
+  line-height: 1.8;
+  margin-bottom: 3rem;
+}
+
+.meta {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-bottom: 3rem;
+}
+
+.metaItem {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  font-size: 1.1rem;
+}
+
+.biddingContainer {
+  margin-top: auto;
+  background-color: var(--surface);
+  padding: 2rem;
+  border-radius: 12px;
+  border: 1px solid var(--surface-border);
+}
+
+@media (max-width: 900px) {
+  .layout {
+    flex-direction: column;
+  }
+  .imageSection {
+    height: 300px;
+  }
+}

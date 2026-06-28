@@ -34,10 +34,43 @@
   letter-spacing: -0.02em;
 }
 
+.titleWrapper {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
 .heroContent h1 {
   font-size: 2.5rem;
-  margin-bottom: 1.5rem;
+  margin-bottom: 0;
   line-height: 1.2;
+}
+
+.soundWave {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  height: 32px;
+}
+
+.soundWave span {
+  display: block;
+  width: 6px;
+  height: 100%;
+  background-color: var(--accent);
+  border-radius: 3px;
+  animation: wave 1.2s ease-in-out infinite;
+}
+
+.soundWave span:nth-child(1) { animation-delay: 0.0s; }
+.soundWave span:nth-child(2) { animation-delay: 0.2s; }
+.soundWave span:nth-child(3) { animation-delay: 0.4s; }
+.soundWave span:nth-child(4) { animation-delay: 0.6s; }
+
+@keyframes wave {
+  0%, 100% { height: 8px; opacity: 0.5; }
+  50% { height: 32px; opacity: 1; box-shadow: 0 0 10px var(--accent); }
 }
 
 .heroContent p {
@@ -115,6 +148,80 @@
   background-color: #aadd00;
 }
 
+/* Magazine Feed Section */
+.magazineFeed {
+  padding: 6rem 5%;
+  background-color: #080a0f;
+}
+
+.magazineCard {
+  display: flex;
+  background-color: var(--surface);
+  border: 1px solid var(--surface-border);
+  border-radius: 12px;
+  overflow: hidden;
+  margin-top: 2rem;
+  text-decoration: none;
+  color: inherit;
+  transition: transform 0.3s ease, border-color 0.3s ease;
+}
+
+.magazineCard:hover {
+  transform: translateY(-5px);
+  border-color: var(--accent);
+}
+
+.magazineImage {
+  flex: 1;
+  min-height: 300px;
+  position: relative;
+}
+
+.magazineContent {
+  flex: 1;
+  padding: 3rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.magazineMeta {
+  display: flex;
+  gap: 1rem;
+  color: var(--accent);
+  font-size: 0.9rem;
+  margin-bottom: 1rem;
+  font-family: monospace;
+}
+
+.magazineTitle {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+  line-height: 1.3;
+}
+
+.magazineDesc {
+  color: #aaa;
+  line-height: 1.6;
+  margin-bottom: 2rem;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.readMore {
+  color: var(--accent);
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-size: 0.9rem;
+  display: inline-block;
+  align-self: flex-start;
+  padding-bottom: 4px;
+  border-bottom: 1px solid var(--accent);
+}
+
 @media (max-width: 768px) {
   .heroContent h2 {
     font-size: 2rem;
@@ -123,5 +230,16 @@
   .heroContent h1 {
     font-size: 1.6rem;
     white-space: nowrap;
+  }
+  .titleWrapper {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+  .magazineCard {
+    flex-direction: column;
+  }
+  .magazineContent {
+    padding: 2rem;
   }
 }

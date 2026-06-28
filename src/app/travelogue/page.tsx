@@ -62,7 +62,7 @@ const initialMockPosts = [
     title: '도쿄의 심야 식당',
     avatarLetter: 'T',
     time: '3 days ago',
-    imageUrl: 'https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?q=80&w=800',
+    imageUrl: ['https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?q=80&w=800'],
     content: '도쿄 밤거리의 네온사인 아래. Wayve에서 추천해준 프라이빗 이자카야는 정말 신의 한 수였다. 관광객은 나 혼자뿐이었음! 🍣🏮',
     likes: 194,
     comments: 21
@@ -71,21 +71,81 @@ const initialMockPosts = [
 
 export default function TraveloguePage() {
   const [activeTab, setActiveTab] = useState<'부산' | '부산 외'>('부산');
-  const [posts, setPosts] = useState(initialMockPosts);
+  const [posts, setPosts] = useState(initialMockPosts.map(p => ({...p, imageUrls: Array.isArray(p.imageUrl) ? p.imageUrl : [p.imageUrl]})));
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isPending, startTransition] = useTransition();
+  const [previewImages, setPreviewImages] = useState<string[]>([]);
+  const MAX_IMAGES = 9;
 
   const filteredPosts = posts.filter(post => post.region === activeTab);
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = Array.from(e.target.files || []);
+    if (previewImages.length + files.length > MAX_IMAGES) {
+      alert(`사진은 최대 ${MAX_IMAGES}장까지 첨부할 수 있습니다.`);
+      return;
+    }
+
+    files.forEach(file => {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const img = new window.Image();
+        img.src = e.target?.result as string;
+        img.onload = () => {
+          const canvas = document.createElement('canvas');
+          const MAX_WIDTH = 800;
+          const MAX_HEIGHT = 800;
+          let width = img.width;
+          let height = img.height;
+
+          if (width > height && width > MAX_WIDTH) {
+            height *= MAX_WIDTH / width;
+            width = MAX_WIDTH;
+          } else if (height > MAX_HEIGHT) {
+            width *= MAX_HEIGHT / height;
+            height = MAX_HEIGHT;
+          }
+
+          canvas.width = width;
+          canvas.height = height;
+          const ctx = canvas.getContext('2d');
+          ctx?.drawImage(img, 0, 0, width, height);
+          
+          const compressedBase64 = canvas.toDataURL('image/jpeg', 0.8);
+          setPreviewImages(prev => [...prev, compressedBase64]);
+        };
+      };
+      reader.readAsDataURL(file);
+    });
+    
+    // reset input
+    e.target.value = '';
+  };
+
+  const removePreview = (index: number) => {
+    setPreviewImages(prev => prev.filter((_, i) => i !== index));
+  };
 
   const handleWriteSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const form = e.currentTarget;
     const formData = new FormData(form);
+    
+    // Add images JSON to formData
+    formData.append('images', JSON.stringify(previewImages));
 
     startTransition(async () => {
       const res = await createPost(formData);
       if (res.success) {
-        // 성공 시 화면(State)에도 새 글 추가 (더미 사진 적용)
+        let finalImages = previewImages;
+        if (finalImages.length === 0) {
+          finalImages = [
+            formData.get('region') === '부산' 
+              ? 'https://images.unsplash.com/photo-1546874177-9e664107314e?q=80&w=800'
+              : 'https://images.unsplash.com/photo-1512453979798-5ea266f8880c?q=80&w=800'
+          ];
+        }
+
         const newPost = {
           id: Date.now(),
           region: formData.get('region') as string,
@@ -93,9 +153,8 @@ export default function TraveloguePage() {
           title: formData.get('title') as string,
           avatarLetter: (formData.get('author') as string).charAt(0).toUpperCase(),
           time: 'Just now',
-          imageUrl: formData.get('region') === '부산' 
-            ? 'https://images.unsplash.com/photo-1546874177-9e664107314e?q=80&w=800' // 부산 기본 이미지
-            : 'https://images.unsplash.com/photo-1512453979798-5ea266f8880c?q=80&w=800', // 부산 외 기본 이미지
+          imageUrl: finalImages[0], // Add for TS compatibility
+          imageUrls: finalImages,
           content: formData.get('content') as string,
           likes: 0,
           comments: 0
@@ -103,6 +162,7 @@ export default function TraveloguePage() {
         
         setPosts([newPost, ...posts]);
         setIsModalOpen(false);
+        setPreviewImages([]);
       } else {
         alert(res.error || '저장 중 오류가 발생했습니다.');
       }
@@ -148,14 +208,23 @@ export default function TraveloguePage() {
                 </div>
               </div>
               
-              <div className={styles.imageWrapper}>
-                <Image 
-                  src={post.imageUrl} 
-                  alt={`${post.author}의 여행 사진`}
-                  fill
-                  style={{ objectFit: 'cover' }}
-                  sizes="(max-width: 768px) 85vw, 350px"
-                />
+              <div className={styles.postImageGrid} data-count={post.imageUrls.length > 4 ? 'more' : post.imageUrls.length}>
+                {post.imageUrls.slice(0, 4).map((imgUrl: string, idx: number) => (
+                  <div key={idx} style={{ position: 'relative', width: '100%', height: '100%', minHeight: '150px' }}>
+                    <Image 
+                      src={imgUrl} 
+                      alt={`${post.author}의 여행 사진 ${idx + 1}`}
+                      fill
+                      style={{ objectFit: 'cover' }}
+                      sizes="(max-width: 768px) 85vw, 350px"
+                    />
+                    {idx === 3 && post.imageUrls.length > 4 && (
+                      <div className={styles.moreImagesOverlay}>
+                        +{post.imageUrls.length - 4}
+                      </div>
+                    )}
+                  </div>
+                ))}
               </div>
 
               <div className={styles.postContent}>
@@ -207,7 +276,30 @@ export default function TraveloguePage() {
 
               <div className={styles.inputGroup}>
                 <label htmlFor="content">내용</label>
-                <textarea id="content" name="content" className={styles.modalTextarea} required placeholder="어떤 은밀하고 특별한 경험을 하셨나요? (사진은 기본 배경으로 대체됩니다)" />
+                <textarea id="content" name="content" className={styles.modalTextarea} required placeholder="어떤 은밀하고 특별한 경험을 하셨나요?" />
+              </div>
+
+              <div className={styles.inputGroup}>
+                <label>사진 첨부 (최대 9장)</label>
+                <input 
+                  type="file" 
+                  accept="image/*" 
+                  multiple 
+                  onChange={handleFileChange} 
+                  className={styles.fileInput}
+                  disabled={previewImages.length >= MAX_IMAGES}
+                />
+                
+                {previewImages.length > 0 && (
+                  <div className={styles.imagePreviewGrid}>
+                    {previewImages.map((imgSrc, idx) => (
+                      <div key={idx} className={styles.previewItem}>
+                        <Image src={imgSrc} alt={`preview ${idx}`} fill style={{ objectFit: 'cover' }} />
+                        <button type="button" className={styles.removeImgBtn} onClick={() => removePreview(idx)}>×</button>
+                      </div>
+                    ))}
+                  </div>
+                )}
               </div>
 
               <button type="submit" className={styles.submitBtn} disabled={isPending}>

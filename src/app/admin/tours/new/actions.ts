@@ -26,13 +26,14 @@ export async function createTour(formData: FormData) {
   let redirectUrl = '';
 
   try {
-    // 3. Supabase products 테이블에 임시 삽입
-    // (투어 테이블을 따로 안 만들었으므로 products에 우회 저장)
-    const { error } = await supabase.from('products').insert([{
+    const { error } = await supabase.from('tours').insert([{
       title,
-      competitor_url: imageUrl || 'ADMIN_TOUR',
-      competitor_price: parseInt(price, 10),
-      wayve_price: parseInt(price, 10),
+      description,
+      price: parseInt(price, 10),
+      duration,
+      max_capacity: parseInt(maxCapacity, 10),
+      category,
+      image_url: imageUrl
     }]);
 
     if (error) throw error;
@@ -44,5 +45,6 @@ export async function createTour(formData: FormData) {
   }
 
   revalidatePath('/admin/tours/new');
+  revalidatePath('/tours');
   redirect(redirectUrl);
 }

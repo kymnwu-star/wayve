@@ -77,27 +77,36 @@
   transform: scale(1.05);
 }
 
-.moreOverlay {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.6);
-  backdrop-filter: blur(2px);
+.moreCard {
+  border: 2px solid rgba(128, 128, 128, 0.3);
+  border-radius: 16px;
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 10;
-  cursor: pointer;
+  text-decoration: none;
+  transition: all 0.4s ease;
+  background-color: transparent;
+  min-height: 380px;
 }
 
-.moreOverlay span {
-  font-size: 2rem;
-  font-weight: 900;
-  color: white;
-  letter-spacing: 0.05em;
+.moreCard:hover {
+  border-color: var(--accent);
+  background-color: rgba(204, 255, 0, 0.05);
+  box-shadow: 0 0 20px rgba(204, 255, 0, 0.1);
+  transform: translateY(-8px);
+}
+
+.moreText {
+  color: rgba(128, 128, 128, 0.8);
+  font-size: 1.5rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
+  transition: color 0.4s ease;
+}
+
+.moreCard:hover .moreText {
+  color: var(--accent);
 }
 
 .cardContent {

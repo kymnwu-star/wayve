@@ -1,0 +1,71 @@
+.biddingForm {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.title {
+  font-size: 1.5rem;
+  margin-bottom: 0.5rem;
+  color: var(--accent);
+}
+
+.desc {
+  font-size: 0.95rem;
+  color: #aaa;
+  margin-bottom: 1rem;
+}
+
+.inputGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.inputGroup label {
+  font-size: 0.9rem;
+  color: #ccc;
+}
+
+.input, .select {
+  padding: 0.8rem 1rem;
+  border-radius: 8px;
+  border: 1px solid var(--surface-border);
+  background-color: #1a1a24;
+  color: #fff;
+  font-size: 1rem;
+}
+
+.input:focus, .select:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+
+.submitBtn {
+  margin-top: 1rem;
+  padding: 1rem;
+  background-color: var(--accent);
+  color: #000;
+  border: none;
+  border-radius: 8px;
+  font-size: 1.1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: transform 0.2s, background-color 0.2s;
+}
+
+.submitBtn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  background-color: #aadd00;
+}
+
+.submitBtn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.floorWarning {
+  color: #ff4444;
+  font-size: 0.85rem;
+  margin-top: 0.2rem;
+}

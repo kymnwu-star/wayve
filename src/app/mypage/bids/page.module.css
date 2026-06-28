@@ -1,0 +1,97 @@
+.main {
+  padding: 8rem 5% 5rem 5%;
+  min-height: 100vh;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.title {
+  font-size: 2.5rem;
+  margin-bottom: 0.5rem;
+  color: #fff;
+}
+
+.subtitle {
+  color: #aaa;
+  margin-bottom: 3rem;
+  font-size: 1.1rem;
+}
+
+.bidsList {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.bidCard {
+  background-color: var(--surface);
+  border: 1px solid var(--surface-border);
+  border-radius: 12px;
+  padding: 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: transform 0.2s;
+}
+
+.bidCard:hover {
+  transform: translateY(-2px);
+  border-color: var(--accent);
+}
+
+.tourTitle {
+  font-size: 1.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.bidDetails {
+  color: #ccc;
+  font-size: 1rem;
+  margin-bottom: 1rem;
+}
+
+.bidPrice {
+  font-size: 1.3rem;
+  font-weight: bold;
+  color: var(--accent);
+}
+
+.badge {
+  padding: 0.5rem 1.2rem;
+  border-radius: 50px;
+  font-size: 0.9rem;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+.badge_pending {
+  background-color: rgba(255, 193, 7, 0.2);
+  color: #ffc107;
+  border: 1px solid #ffc107;
+}
+
+.badge_accepted {
+  background-color: rgba(170, 221, 0, 0.2);
+  color: var(--accent);
+  border: 1px solid var(--accent);
+}
+
+.badge_rejected {
+  background-color: rgba(255, 68, 68, 0.2);
+  color: #ff4444;
+  border: 1px solid #ff4444;
+}
+
+.badge_expired {
+  background-color: rgba(153, 153, 153, 0.2);
+  color: #999;
+  border: 1px solid #999;
+}
+
+@media (max-width: 768px) {
+  .bidCard {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1.5rem;
+  }
+}
