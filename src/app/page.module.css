@@ -222,8 +222,15 @@
 }
 
 @media (max-width: 768px) {
+  .hero {
+    height: auto;
+    min-height: 100vh;
+    align-items: flex-start;
+    padding-top: 200px;
+    padding-bottom: 3rem;
+  }
   .heroContent {
-    margin-top: 7rem;
+    margin-top: 0;
   }
   .heroContent h2 {
     font-size: 2rem;
