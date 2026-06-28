@@ -20,7 +20,7 @@ export async function createPost(formData: FormData) {
 
   // If no images, provide default
   if (imageUrls.length === 0) {
-    imageUrls = ['https://jasonteale.com/blog/wp-content/uploads/2021/02/D79A3022_AuroraHDR2019-edit-1200x600.jpg'];
+    imageUrls = ['https://images.unsplash.com/photo-1546874177-9e664107314e?q=80&w=800'];
   }
 
   // We store the JSON array string into the image_url column

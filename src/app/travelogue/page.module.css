@@ -237,6 +237,8 @@
   max-width: 500px;
   padding: 2rem;
   box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+  max-height: 90vh;
+  overflow-y: auto;
 }
 
 .modalHeader {

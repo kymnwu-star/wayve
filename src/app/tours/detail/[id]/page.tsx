@@ -39,7 +39,7 @@ export default async function TourDetailPage({ params }: { params: Promise<{ id:
           price: formatPrice(data.price),
           priceNum: data.price,
           duration: data.duration || '2시간',
-          imageUrl: data.image_url || 'https://ak-d.tripcdn.com/sl/app/d1/20210204/a933f7c4627b4b10b0b8efebdf9168f1_1000.jpg'
+          imageUrl: data.image_url || 'https://images.unsplash.com/photo-1512453979798-5ea266f8880c?q=80&w=800'
         };
       }
     } catch (e) {

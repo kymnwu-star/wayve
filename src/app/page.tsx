@@ -20,8 +20,8 @@ export default async function Home() {
       <section className={styles.hero}>
         <div className={styles.heroBackground}>
           <Image 
-            src="https://jasonteale.com/blog/wp-content/uploads/2021/02/D79A3022_AuroraHDR2019-edit-1200x600.jpg"
-            alt="Midnight Raw Hero"
+            src="https://images.unsplash.com/photo-1526367355811-06161c28c8de?q=80&w=1920&auto=format&fit=crop"
+            alt="Songjeong Surfing Background"
             fill
             style={{ objectFit: 'cover' }}
             priority
@@ -51,7 +51,7 @@ export default async function Home() {
         <Link href="/magazine" className={styles.magazineCard}>
           <div className={styles.magazineImage}>
             <Image 
-              src="https://ak-d.tripcdn.com/sl/app/d1/20210204/a933f7c4627b4b10b0b8efebdf9168f1_1000.jpg"
+              src="https://images.unsplash.com/photo-1512453979798-5ea266f8880c?q=80&w=800"
               alt="영도 대평동"
               fill
               style={{ objectFit: 'cover' }}
@@ -76,19 +76,19 @@ export default async function Home() {
         <h2 className={styles.sectionTitle}>Premium Categorization</h2>
         <div className={styles.grid}>
           <div className={styles.card}>
-            <div className={styles.iconWrapper}>🚢</div>
-            <h3>Marine Cruise</h3>
-            <p>광안리 바다 한가운데서 프라이빗 아티스트의 세션을 감상하는 한정판 사운드 크루징 경험.</p>
+            <div className={styles.iconWrapper}>🎯</div>
+            <h3>투어&액티비티</h3>
+            <p>전문 가이드와 함께하는 특별한 로컬 투어와 다이나믹한 액티비티 경험.</p>
           </div>
           <div className={styles.card}>
-            <div className={styles.iconWrapper}>☕</div>
-            <h3>Boutique Coffee</h3>
-            <p>전포동, 영도 크래프트 브루어리의 바리스타들과 깊이 호흡하는 독점 드립 테이스팅 마스터클래스.</p>
+            <div className={styles.iconWrapper}>🎫</div>
+            <h3>티켓</h3>
+            <p>부산의 핫플레이스와 전시, 어트랙션을 가장 스마트하게 즐기는 방법.</p>
           </div>
           <div className={styles.card}>
-            <div className={styles.iconWrapper}>🌙</div>
-            <h3>Night Exploration</h3>
-            <p>산복도로의 어둠 아래 수놓인 항구의 조명선을 가이드의 사적인 스토리 텔링과 수집하는 밤 산책.</p>
+            <div className={styles.iconWrapper}>🏨</div>
+            <h3>stay</h3>
+            <p>바다 전망의 프리미엄 호텔부터 감성 넘치는 로컬 숙소까지 완벽한 휴식.</p>
           </div>
         </div>
       </section>

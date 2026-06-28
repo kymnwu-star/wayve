@@ -8,7 +8,7 @@ export const dummyTours = [
     description: '붉게 물드는 광안리 바다 한가운데서 로컬 인디 아티스트의 어쿠스틱 라이브를 들으며 와인을 즐기는 소수 정예 투어입니다.',
     price: '85,000',
     duration: '2.5시간',
-    imageUrl: 'https://jasonteale.com/blog/wp-content/uploads/2021/02/D79A3022_AuroraHDR2019-edit-1200x600.jpg',
+    imageUrl: 'https://images.unsplash.com/photo-1546874177-9e664107314e?q=80&w=800',
   },
   {
     id: 'dummy-2',
@@ -18,7 +18,7 @@ export const dummyTours = [
     description: '달빛 아래 해운대 마린시티의 압도적인 스카이라인을 배경으로 최고급 샴페인과 함께하는 럭셔리 네트워킹 경험.',
     price: '120,000',
     duration: '3시간',
-    imageUrl: 'https://jasonteale.com/blog/wp-content/uploads/2021/02/D79A3022_AuroraHDR2019-edit-1200x600.jpg',
+    imageUrl: 'https://images.unsplash.com/photo-1546874177-9e664107314e?q=80&w=800',
   },
   {
     id: 'dummy-3',
@@ -28,7 +28,7 @@ export const dummyTours = [
     description: '고요한 아침의 송정 바다에서 즐기는 프라이빗 서핑 레슨과 신선한 바다 스위밍, 그리고 로컬 셰프의 브런치 코스.',
     price: '150,000',
     duration: '4시간',
-    imageUrl: 'https://jasonteale.com/blog/wp-content/uploads/2021/02/D79A3022_AuroraHDR2019-edit-1200x600.jpg',
+    imageUrl: 'https://images.unsplash.com/photo-1546874177-9e664107314e?q=80&w=800',
   },
   {
     id: 'dummy-10',
@@ -38,7 +38,7 @@ export const dummyTours = [
     description: '일반 관광객은 접근할 수 없는 태종대 절벽 아래 숨겨진 해안 동굴을 소형 보트로 탐험하는 어드벤처 투어.',
     price: '95,000',
     duration: '2.5시간',
-    imageUrl: 'https://jasonteale.com/blog/wp-content/uploads/2021/02/D79A3022_AuroraHDR2019-edit-1200x600.jpg',
+    imageUrl: 'https://images.unsplash.com/photo-1546874177-9e664107314e?q=80&w=800',
   },
 
   // Boutique Coffee
@@ -50,7 +50,7 @@ export const dummyTours = [
     description: '간판 없는 비밀스러운 로스터리 공간에서 부산 최고의 바리스타가 내려주는 3가지 독점 블렌딩을 시음하는 시간.',
     price: '45,000',
     duration: '2시간',
-    imageUrl: 'https://www.lemon8-app.com/jins_taste/7339793132049007106?region=kr',
+    imageUrl: 'https://images.unsplash.com/photo-1603525281488-8422731cde7e?q=80&w=800',
   },
   {
     id: 'dummy-5',
@@ -60,7 +60,7 @@ export const dummyTours = [
     description: '낡은 조선소 부품 공장을 개조한 카페에서 거친 공장 지대의 매력과 극도로 섬세한 핸드드립 커피의 대비를 즐깁니다.',
     price: '38,000',
     duration: '1.5시간',
-    imageUrl: 'https://www.lemon8-app.com/jins_taste/7339793132049007106?region=kr',
+    imageUrl: 'https://images.unsplash.com/photo-1603525281488-8422731cde7e?q=80&w=800',
   },
   {
     id: 'dummy-6',
@@ -70,7 +70,7 @@ export const dummyTours = [
     description: '세월이 멈춘 듯한 온천장의 오래된 다관에서, 로컬 디저트 장인이 직접 구운 다과와 함께하는 심야 티 페어링 투어.',
     price: '55,000',
     duration: '2.5시간',
-    imageUrl: 'https://www.lemon8-app.com/jins_taste/7339793132049007106?region=kr',
+    imageUrl: 'https://images.unsplash.com/photo-1603525281488-8422731cde7e?q=80&w=800',
   },
   {
     id: 'dummy-11',
@@ -80,7 +80,7 @@ export const dummyTours = [
     description: '부산 로컬 식재료를 베이스로 우려낸 프리미엄 차와 이에 페어링되는 디저트를 즐기는 하이엔드 티 오마카세.',
     price: '70,000',
     duration: '2시간',
-    imageUrl: 'https://www.lemon8-app.com/jins_taste/7339793132049007106?region=kr',
+    imageUrl: 'https://images.unsplash.com/photo-1603525281488-8422731cde7e?q=80&w=800',
   },
 
   // Night Exploration
@@ -92,7 +92,7 @@ export const dummyTours = [
     description: '인적 끊긴 산복도로의 좁은 계단길을 오르며, 가이드가 렌탈해주는 필름 카메라로 부산의 가장 아날로그적인 밤을 담습니다.',
     price: '65,000',
     duration: '3시간',
-    imageUrl: 'https://ak-d.tripcdn.com/sl/app/d1/20210204/a933f7c4627b4b10b0b8efebdf9168f1_1000.jpg',
+    imageUrl: 'https://images.unsplash.com/photo-1512453979798-5ea266f8880c?q=80&w=800',
   },
   {
     id: 'dummy-8',
@@ -102,7 +102,7 @@ export const dummyTours = [
     description: '낮의 소음이 사라진 영도 수리조선소 골목. 거대한 선박의 그림자와 노란 가로등 불빛 아래 숨겨진 거친 이야기들을 듣습니다.',
     price: '40,000',
     duration: '2시간',
-    imageUrl: 'https://ak-d.tripcdn.com/sl/app/d1/20210204/a933f7c4627b4b10b0b8efebdf9168f1_1000.jpg',
+    imageUrl: 'https://images.unsplash.com/photo-1512453979798-5ea266f8880c?q=80&w=800',
   },
   {
     id: 'dummy-9',
@@ -112,7 +112,7 @@ export const dummyTours = [
     description: '사람들이 몰리는 흔한 전망대가 아닌, 가이드만 아는 황령산의 비밀스러운 숲길을 지나 만나는 가장 압도적인 부산의 야경.',
     price: '50,000',
     duration: '2.5시간',
-    imageUrl: 'https://ak-d.tripcdn.com/sl/app/d1/20210204/a933f7c4627b4b10b0b8efebdf9168f1_1000.jpg',
+    imageUrl: 'https://images.unsplash.com/photo-1512453979798-5ea266f8880c?q=80&w=800',
   },
   {
     id: 'dummy-12',
@@ -122,6 +122,6 @@ export const dummyTours = [
     description: '화려한 광안대교 아래를 직접 통과하며, 오직 배 위에서만 볼 수 있는 은밀하고 압도적인 빛의 향연을 감상합니다.',
     price: '75,000',
     duration: '2시간',
-    imageUrl: 'https://ak-d.tripcdn.com/sl/app/d1/20210204/a933f7c4627b4b10b0b8efebdf9168f1_1000.jpg',
+    imageUrl: 'https://images.unsplash.com/photo-1512453979798-5ea266f8880c?q=80&w=800',
   }
 ];

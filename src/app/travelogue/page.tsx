@@ -1,8 +1,9 @@
 'use client';
 
-import { useState, useTransition } from 'react';
+import { useState, useTransition, useEffect } from 'react';
 import Image from 'next/image';
 import { createPost } from './actions';
+import { supabase } from '@/utils/supabase';
 import styles from './page.module.css';
 
 // Mock Data for 5 posts
@@ -78,6 +79,49 @@ export default function TraveloguePage() {
   const MAX_IMAGES = 9;
 
   const filteredPosts = posts.filter(post => post.region === activeTab);
+
+  useEffect(() => {
+    async function fetchPosts() {
+      try {
+        const { data, error } = await supabase.from('travelogues').select('*').order('created_at', { ascending: false });
+        if (data && !error) {
+          const dbPosts = data.map((dbPost: any) => {
+            let parsedImages = [];
+            try {
+              parsedImages = JSON.parse(dbPost.image_url);
+            } catch (e) {
+              parsedImages = [dbPost.image_url];
+            }
+            if (!Array.isArray(parsedImages) || parsedImages.length === 0) {
+              parsedImages = ['https://images.unsplash.com/photo-1546874177-9e664107314e?q=80&w=800'];
+            }
+
+            return {
+              id: dbPost.id,
+              region: '부산', // DB 스키마에 region이 없다면 기본값 사용
+              author: dbPost.author || 'Anonymous',
+              title: dbPost.title || 'Untitled',
+              avatarLetter: (dbPost.author || 'A').charAt(0).toUpperCase(),
+              time: new Date(dbPost.created_at).toLocaleDateString(),
+              imageUrl: parsedImages[0],
+              imageUrls: parsedImages,
+              content: dbPost.content || '',
+              likes: 0,
+              comments: 0
+            };
+          });
+
+          setPosts(() => {
+            const mockFormatted = initialMockPosts.map(p => ({...p, imageUrls: Array.isArray(p.imageUrl) ? p.imageUrl : [p.imageUrl]}));
+            return [...dbPosts, ...mockFormatted];
+          });
+        }
+      } catch (err) {
+        console.error('Error fetching travelogues', err);
+      }
+    }
+    fetchPosts();
+  }, []);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(e.target.files || []);
@@ -257,29 +301,6 @@ export default function TraveloguePage() {
             </div>
             <form className={styles.modalForm} onSubmit={handleWriteSubmit}>
               <div className={styles.inputGroup}>
-                <label htmlFor="region">지역구분</label>
-                <select id="region" name="region" className={styles.modalSelect} required defaultValue={activeTab}>
-                  <option value="부산">📍 부산 (Busan)</option>
-                  <option value="부산 외">✈️ 부산 외 (Global)</option>
-                </select>
-              </div>
-              
-              <div className={styles.inputGroup}>
-                <label htmlFor="title">제목</label>
-                <input id="title" name="title" type="text" className={styles.modalInput} required placeholder="기억에 남는 순간을 요약해주세요" />
-              </div>
-
-              <div className={styles.inputGroup}>
-                <label htmlFor="author">작성자 (닉네임)</label>
-                <input id="author" name="author" type="text" className={styles.modalInput} required placeholder="예: 로컬탐험가" />
-              </div>
-
-              <div className={styles.inputGroup}>
-                <label htmlFor="content">내용</label>
-                <textarea id="content" name="content" className={styles.modalTextarea} required placeholder="어떤 은밀하고 특별한 경험을 하셨나요?" />
-              </div>
-
-              <div className={styles.inputGroup}>
                 <label>사진 첨부 (최대 9장)</label>
                 <input 
                   type="file" 
@@ -300,6 +321,29 @@ export default function TraveloguePage() {
                     ))}
                   </div>
                 )}
+              </div>
+
+              <div className={styles.inputGroup}>
+                <label htmlFor="region">지역구분</label>
+                <select id="region" name="region" className={styles.modalSelect} required defaultValue={activeTab}>
+                  <option value="부산">📍 부산 (Busan)</option>
+                  <option value="부산 외">✈️ 부산 외 (Global)</option>
+                </select>
+              </div>
+              
+              <div className={styles.inputGroup}>
+                <label htmlFor="title">제목</label>
+                <input id="title" name="title" type="text" className={styles.modalInput} required placeholder="기억에 남는 순간을 요약해주세요" />
+              </div>
+
+              <div className={styles.inputGroup}>
+                <label htmlFor="author">작성자 (닉네임)</label>
+                <input id="author" name="author" type="text" className={styles.modalInput} required placeholder="예: 로컬탐험가" />
+              </div>
+
+              <div className={styles.inputGroup}>
+                <label htmlFor="content">내용</label>
+                <textarea id="content" name="content" className={styles.modalTextarea} required placeholder="어떤 은밀하고 특별한 경험을 하셨나요?" />
               </div>
 
               <button type="submit" className={styles.submitBtn} disabled={isPending}>

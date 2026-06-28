@@ -32,10 +32,10 @@ export default async function CategoryPage({
     price: `${(50 + (i % 5) * 10).toLocaleString()},000`,
     duration: `${2 + (i % 3)}시간`,
     imageUrl: categoryName === 'Marine Cruise' 
-      ? 'https://jasonteale.com/blog/wp-content/uploads/2021/02/D79A3022_AuroraHDR2019-edit-1200x600.jpg'
+      ? 'https://images.unsplash.com/photo-1546874177-9e664107314e?q=80&w=800'
       : categoryName === 'Boutique Coffee'
-      ? 'https://www.lemon8-app.com/jins_taste/7339793132049007106?region=kr'
-      : 'https://ak-d.tripcdn.com/sl/app/d1/20210204/a933f7c4627b4b10b0b8efebdf9168f1_1000.jpg'
+      ? 'https://images.unsplash.com/photo-1603525281488-8422731cde7e?q=80&w=800'
+      : 'https://images.unsplash.com/photo-1512453979798-5ea266f8880c?q=80&w=800'
   }));
 
   return (

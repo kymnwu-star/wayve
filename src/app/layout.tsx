@@ -40,7 +40,6 @@ export default async function RootLayout({
             <Link href="/travelogue" style={{ fontWeight: 'bold' }}>Log</Link>
             <Link href="/tours" style={{ fontWeight: 'bold' }}>Tours</Link>
             <Link href="/magazine" style={{ fontWeight: 'bold' }}>Magazine</Link>
-            <Link href="/stays" style={{ fontWeight: 'bold' }}>Stays</Link>
             <Link href="/shop" style={{ fontWeight: 'bold' }}>Shop</Link>
             {isLoggedIn ? (
               <SidebarMenu role={role?.value || null} email={session?.value || null} />
