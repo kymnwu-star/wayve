@@ -5,6 +5,7 @@ import { cookies } from "next/headers";
 import SidebarMenu from "@/components/SidebarMenu";
 import Footer from "@/components/Footer";
 import AIAssistant from "@/components/AIAssistant";
+import WeatherCurrencyBar from "@/components/WeatherCurrencyBar";
 import "./globals.css";
 
 const inter = Inter({ subsets: ["latin"], variable: '--font-sans' });
@@ -28,6 +29,7 @@ export default async function RootLayout({
   return (
     <html lang="ko" className={`${inter.variable} ${outfit.variable}`}>
       <body>
+        <WeatherCurrencyBar />
         <header className="main-header">
           <Link href="/" className="logo text-accent" style={{ textDecoration: 'none' }}>BUSAN WAYVE</Link>
           <nav>
