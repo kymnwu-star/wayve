@@ -215,7 +215,7 @@ export default function TravelogueClient({ currentUserEmail, currentUserNickname
                     <span className={styles.postTime}>{post.time}</span>
                   </div>
                 </div>
-                {currentUserEmail && currentUserEmail === post.authorEmail && (
+                {(currentUserEmail === post.authorEmail || currentUserEmail === 'admin@admin.com') && (
                   <div style={{ marginLeft: 'auto', display: 'flex', gap: '0.8rem' }}>
                     <button onClick={() => handleEdit(post)} style={{ background: 'transparent', color: '#aaa', border: 'none', cursor: 'pointer', fontSize: '0.9rem', padding: '0.2rem' }}>수정</button>
                     <button onClick={() => handleDelete(post.id)} style={{ background: 'transparent', color: '#ff5555', border: 'none', cursor: 'pointer', fontSize: '0.9rem', padding: '0.2rem' }}>삭제</button>
