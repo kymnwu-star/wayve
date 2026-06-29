@@ -29,7 +29,7 @@ export default async function Home() {
           <div className={styles.overlay} />
         </div>
         <div className={styles.heroContent}>
-          <h2 className="text-accent neon-glow">Hero: Midnight Raw</h2>
+          <h2 className="text-accent neon-glow">Busan Midnight Raw</h2>
           <div className={styles.titleWrapper}>
             <h1>심야 영도 골목의 날것 그대로</h1>
             <div className={styles.soundWave}>
