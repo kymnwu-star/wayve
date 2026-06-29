@@ -4,6 +4,7 @@ import { dummyTours } from '@/data/dummyTours';
 import { supabase } from '@/utils/supabase';
 import styles from './page.module.css';
 import BiddingSection from '@/components/BiddingSection';
+import KakaoMap from '@/components/KakaoMap';
 
 // Helper for formatting DB prices
 function formatPrice(price: number | string | null | undefined): string {
@@ -99,6 +100,9 @@ export default async function TourDetailPage({ params }: { params: Promise<{ id:
           <div className={styles.meta}>
             <div className={styles.metaItem}>⏱ <span>소요 시간: {tour.duration}</span></div>
           </div>
+
+          {/* 투어 위치 지도 (기본값: 부산 해운대 좌표) */}
+          <KakaoMap />
 
           <div className={styles.biddingContainer}>
             <BiddingSection tourId={tour.id} timePrices={tour.timePrices} />
