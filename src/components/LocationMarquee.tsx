@@ -3,10 +3,10 @@ import styles from './LocationMarquee.module.css';
 
 const locations = [
   { name: '영도 (Yeongdo)', imageUrl: '/images/daepyeong_night.jpg' },
-  { name: '감천문화마을 (Gamcheon)', imageUrl: 'https://images.unsplash.com/photo-1589828117730-22cba2d5e2e8?q=80&w=800' },
-  { name: '이바구길 (Ibagu-gil)', imageUrl: 'https://images.unsplash.com/photo-1605336496468-b7c126f59792?q=80&w=800' },
-  { name: '청사포 (Cheongsapo)', imageUrl: 'https://images.unsplash.com/photo-1596422846543-74c6d61d15db?q=80&w=800' },
-  { name: '용궁사 (Yonggungsa)', imageUrl: 'https://images.unsplash.com/photo-1574780517918-a6d5162a7587?q=80&w=800' },
+  { name: '감천문화마을 (Gamcheon)', imageUrl: '/images/gamcheon_village.jpg' },
+  { name: '이바구길 (Ibagu-gil)', imageUrl: '/images/ibagu_gil.jpg' },
+  { name: '청사포 (Cheongsapo)', imageUrl: '/images/cheongsapo.jpg' },
+  { name: '용궁사 (Yonggungsa)', imageUrl: '/images/yonggungsa.jpg' },
 ];
 
 export default function LocationMarquee() {
