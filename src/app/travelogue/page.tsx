@@ -96,16 +96,27 @@ export default function TraveloguePage() {
               parsedImages = ['https://images.unsplash.com/photo-1546874177-9e664107314e?q=80&w=800'];
             }
 
+            let cleanContent = dbPost.content || '';
+            let parsedRegion = '부산';
+
+            if (cleanContent.includes('<!--REGION:')) {
+              const match = cleanContent.match(/<!--REGION:(.*)-->/);
+              if (match) {
+                parsedRegion = match[1];
+                cleanContent = cleanContent.replace(/<!--REGION:.*-->/, '').trim();
+              }
+            }
+
             return {
               id: dbPost.id,
-              region: '부산', // DB 스키마에 region이 없다면 기본값 사용
+              region: parsedRegion,
               author: dbPost.author || 'Anonymous',
               title: dbPost.title || 'Untitled',
               avatarLetter: (dbPost.author || 'A').charAt(0).toUpperCase(),
               time: new Date(dbPost.created_at).toLocaleDateString(),
               imageUrl: parsedImages[0],
               imageUrls: parsedImages,
-              content: dbPost.content || '',
+              content: cleanContent,
               likes: 0,
               comments: 0
             };

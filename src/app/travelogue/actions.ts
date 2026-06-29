@@ -5,9 +5,13 @@ import { supabase } from '@/utils/supabase'
 export async function createPost(formData: FormData) {
   const title = formData.get('title') as string;
   const author = formData.get('author') as string;
-  const content = formData.get('content') as string;
-  // images field will contain a stringified array of Base64 strings or URLs
+  let content = formData.get('content') as string;
+  const region = formData.get('region') as string;
   const imagesJson = formData.get('images') as string;
+
+  if (region) {
+    content += `\n<!--REGION:${region}-->`;
+  }
 
   let imageUrls: string[] = [];
   if (imagesJson) {
