@@ -219,9 +219,10 @@ export default function TourForm() {
         <label htmlFor="category">Category</label>
         <select id="category" name="category" required className={styles.select} value={formData.category} onChange={handleChange}>
           <option value="">카테고리를 선택하세요</option>
-          <option value="Marine Cruise">Marine Cruise</option>
-          <option value="Boutique Coffee">Boutique Coffee</option>
-          <option value="Night Exploration">Night Exploration</option>
+          <option value="투어&액티비티">투어&액티비티</option>
+          <option value="티켓">티켓</option>
+          <option value="stay">stay</option>
+          <option value="Shop">Shop</option>
         </select>
       </div>
       

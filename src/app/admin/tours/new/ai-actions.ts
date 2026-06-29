@@ -44,7 +44,7 @@ export async function analyzeImage(imageUrl: string) {
       - price: 30000에서 150000 사이의 적절한 가격 (숫자만, 예: 65000)
       - duration: 예상 소요 시간 (예: 2 hours, 3 hours)
       - maxCapacity: 예상 최대 인원 (예: 4, 6, 8, 12 중 하나)
-      - category: "Marine Cruise", "Boutique Coffee", "Night Exploration" 중 사진에 가장 잘 맞는 것 하나
+      - category: "투어&액티비티", "티켓", "stay", "Shop" 중 사진에 가장 잘 맞는 것 하나
       
       출력 형식:
       {

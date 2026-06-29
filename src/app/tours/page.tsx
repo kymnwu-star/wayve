@@ -13,7 +13,7 @@ function formatPrice(price: number | string | null | undefined): string {
 export const revalidate = 0; // 동적 렌더링 (DB 갱신시 바로 반영되도록 설정)
 
 export default async function ToursPage() {
-  const categories = ['투어&액티비티', '티켓', 'stay'];
+  const categories = ['투어&액티비티', '티켓', 'stay', 'Shop'];
 
   // DB에서 데이터 가져오기 (에러가 나도 더미 데이터는 보이게 처리)
   let dbToursData: any[] = [];
@@ -25,16 +25,19 @@ export default async function ToursPage() {
   }
 
   // DB 데이터를 더미 데이터와 동일한 형태로 변환
-  const dbTours = dbToursData.map((t: any) => ({
-    id: t.id.toString(),
-    category: t.category || '투어&액티비티',
-    icon: t.category === '투어&액티비티' ? '🎯' : t.category === '티켓' ? '🎫' : '🏨',
+  const dbTours = dbToursData.map((t: any) => {
+    const validCat = categories.includes(t.category) ? t.category : '투어&액티비티';
+    return {
+      id: t.id.toString(),
+      category: validCat,
+      icon: validCat === '투어&액티비티' ? '🎯' : validCat === '티켓' ? '🎫' : validCat === 'stay' ? '🏨' : '🛍️',
     title: t.title || 'Untitled Tour',
     description: t.description || '상세 설명이 없습니다.',
     price: formatPrice(t.price),
-    duration: t.duration || '2시간',
-    imageUrl: t.image_url || 'https://images.unsplash.com/photo-1512453979798-5ea266f8880c?q=80&w=800'
-  }));
+      duration: t.duration || '2시간',
+      imageUrl: t.image_url || 'https://images.unsplash.com/photo-1512453979798-5ea266f8880c?q=80&w=800'
+    };
+  });
 
   // 새 데이터가 위로 오도록 병합
   const allTours = [...dbTours, ...dummyTours];
@@ -46,7 +49,7 @@ export default async function ToursPage() {
 
       {categories.map((cat) => {
         const categoryTours = allTours.filter(tour => tour.category === cat);
-        const icon = cat === '투어&액티비티' ? '🎯' : cat === '티켓' ? '🎫' : '🏨';
+        const icon = cat === '투어&액티비티' ? '🎯' : cat === '티켓' ? '🎫' : cat === 'stay' ? '🏨' : '🛍️';
 
         return (
           <section key={cat} className={styles.categorySection}>
