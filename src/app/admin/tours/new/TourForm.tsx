@@ -30,6 +30,24 @@ export default function TourForm() {
 
   const [isKakaoLoaded, setIsKakaoLoaded] = useState(false);
 
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    if (window.kakao && window.kakao.maps) {
+      setIsKakaoLoaded(true);
+      return;
+    }
+    const existingScript = document.getElementById('kakao-sdk');
+    if (!existingScript) {
+      const script = document.createElement('script');
+      script.id = 'kakao-sdk';
+      script.src = `//dapi.kakao.com/v2/maps/sdk.js?appkey=7ff26c6aeb4799e58f60679f26fa69b7&autoload=false&libraries=services`;
+      script.onload = () => setIsKakaoLoaded(true);
+      document.head.appendChild(script);
+    } else {
+      existingScript.addEventListener('load', () => setIsKakaoLoaded(true));
+    }
+  }, []);
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
@@ -176,11 +194,6 @@ export default function TourForm() {
 
   return (
     <>
-      <Script
-        strategy="lazyOnload"
-        src={`//dapi.kakao.com/v2/maps/sdk.js?appkey=7ff26c6aeb4799e58f60679f26fa69b7&autoload=false&libraries=services`}
-        onLoad={() => setIsKakaoLoaded(true)}
-      />
       <form className={styles.form} onSubmit={handleSubmit}>
       <div className={styles.inputGroup} style={{ backgroundColor: 'rgba(255,255,255,0.02)', padding: '1.5rem', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.1)' }}>
         <h3 style={{ marginBottom: '1rem', color: 'var(--accent)' }}>✨ AI 자동완성 (사진 첨부)</h3>
