@@ -50,7 +50,7 @@ html {
 
 /* Header */
 .main-header {
-  position: fixed;
+  position: sticky;
   top: 0;
   width: 100%;
   padding: 1.5rem 5%;
