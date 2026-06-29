@@ -7,6 +7,8 @@
   height: 100vh;
   display: flex;
   align-items: center;
+  justify-content: space-between;
+  gap: 3rem;
   padding: 0 5%;
 }
 
@@ -147,19 +149,31 @@
   background-color: #aadd00;
 }
 
-/* Magazine Feed Section */
-.magazineFeed {
-  padding: 6rem 5%;
-  background-color: #080a0f;
+.heroRightContent {
+  flex: 1;
+  max-width: 500px;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.magazineLabel {
+  font-family: var(--font-heading), sans-serif;
+  color: var(--accent);
+  font-weight: bold;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  margin-bottom: 1rem;
 }
 
 .magazineCard {
   display: flex;
-  background-color: var(--surface);
+  flex-direction: column;
+  background-color: rgba(21, 26, 34, 0.8);
+  backdrop-filter: blur(10px);
   border: 1px solid var(--surface-border);
   border-radius: 12px;
   overflow: hidden;
-  margin-top: 2rem;
   text-decoration: none;
   color: inherit;
   transition: transform 0.3s ease, border-color 0.3s ease;
@@ -171,14 +185,13 @@
 }
 
 .magazineImage {
-  flex: 1;
-  min-height: 300px;
+  width: 100%;
+  min-height: 250px;
   position: relative;
 }
 
 .magazineContent {
-  flex: 1;
-  padding: 3rem;
+  padding: 2rem;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -225,9 +238,11 @@
   .hero {
     height: auto;
     min-height: 100vh;
+    flex-direction: column;
     align-items: flex-start;
     padding-top: 200px;
     padding-bottom: 3rem;
+    gap: 2rem;
   }
   .heroContent {
     margin-top: 0;
@@ -249,6 +264,6 @@
     flex-direction: column;
   }
   .magazineContent {
-    padding: 2rem;
+    padding: 1.5rem;
   }
 }

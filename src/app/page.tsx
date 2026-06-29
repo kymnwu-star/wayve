@@ -61,33 +61,30 @@ export default async function Home() {
               <p>프리미엄 호텔부터 감성 넘치는 로컬 숙소까지 완벽한 휴식.</p>
             </div>
           </div>
-        </div>
-      </section>
-
-      {/* Latest Magazine Feed */}
-      <section className={styles.magazineFeed}>
-        <h2 className={styles.sectionTitle}>Latest in Magazine</h2>
-        <Link href="/magazine" className={styles.magazineCard}>
-          <div className={styles.magazineImage}>
-            <Image 
-              src="/images/daepyeong_night.jpg"
-              alt="영도 대평동"
-              fill
-              style={{ objectFit: 'cover' }}
-            />
-          </div>
-          <div className={styles.magazineContent}>
-            <div className={styles.magazineMeta}>
-              <span>WAYVE Editorial Team</span>
-              <span>2026. 06. 24</span>
+        <div className={styles.heroRightContent}>
+          <div className={styles.magazineLabel}>Latest in Magazine</div>
+          <Link href="/magazine" className={styles.magazineCard}>
+            <div className={styles.magazineImage}>
+              <Image 
+                src="/images/daepyeong_night.jpg"
+                alt="영도 대평동"
+                fill
+                style={{ objectFit: 'cover' }}
+              />
             </div>
-            <h3 className={styles.magazineTitle}>영도 대평동: 멈춰진 시간 속을 걷다</h3>
-            <p className={styles.magazineDesc}>
-              영도다리를 건너면 닿는 대평동은 수십 년 전의 흔적이 고스란히 남아있는 특별한 공간입니다. '깡깡이 예술마을'로도 불리는 이곳은 예전 수리조선소에서 배 표면의 녹을 벗겨내는 망치질 소리에서 유래했습니다. 좁은 골목길을 따라 걷다 보면, 거대한 선박과 녹슨 닻들이 일상과 어우러진 비현실적인 풍경을 마주하게 됩니다.
-            </p>
-            <span className={styles.readMore}>Read the Full Story →</span>
-          </div>
-        </Link>
+            <div className={styles.magazineContent}>
+              <div className={styles.magazineMeta}>
+                <span>WAYVE Editorial Team</span>
+                <span>2026. 06. 24</span>
+              </div>
+              <h3 className={styles.magazineTitle}>영도 대평동: 멈춰진 시간 속을 걷다</h3>
+              <p className={styles.magazineDesc}>
+                영도다리를 건너면 닿는 대평동은 수십 년 전의 흔적이 고스란히 남아있는 특별한 공간입니다. '깡깡이 예술마을'로도 불리는 이곳은 예전 수리조선소에서 배 표면의 녹을 벗겨내는 망치질 소리에서 유래했습니다.
+              </p>
+              <span className={styles.readMore}>Read the Full Story →</span>
+            </div>
+          </Link>
+        </div>
       </section>
 
 
