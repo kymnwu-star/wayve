@@ -266,4 +266,7 @@
   .magazineContent {
     padding: 1.5rem;
   }
+  .heroGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
 }
