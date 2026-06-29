@@ -1,6 +1,7 @@
 'use server'
 
 import { supabase } from '@/utils/supabase'
+import { cookies } from 'next/headers'
 
 export async function createPost(formData: FormData) {
   const title = formData.get('title') as string;
@@ -9,8 +10,14 @@ export async function createPost(formData: FormData) {
   const region = formData.get('region') as string;
   const imagesJson = formData.get('images') as string;
 
+  const cookieStore = await cookies();
+  const userEmail = cookieStore.get('wave_session')?.value;
+
   if (region) {
     content += `\n<!--REGION:${region}-->`;
+  }
+  if (userEmail) {
+    content += `\n<!--EMAIL:${userEmail}-->`;
   }
 
   let imageUrls: string[] = [];
@@ -42,7 +49,80 @@ export async function createPost(formData: FormData) {
 
     return { success: true };
   } catch (error) {
-    console.error('Supabase API Error:', error);
-    return { success: false, error: '백엔드 시스템 오류가 발생했습니다.' };
+    console.error(error);
+    return { success: false };
+  }
+}
+
+export async function updatePost(id: number, formData: FormData) {
+  const title = formData.get('title') as string;
+  const author = formData.get('author') as string;
+  let content = formData.get('content') as string;
+  const region = formData.get('region') as string;
+  const imagesJson = formData.get('images') as string;
+
+  const cookieStore = await cookies();
+  const userEmail = cookieStore.get('wave_session')?.value;
+
+  if (!userEmail) return { success: false, error: 'Unauthorized' };
+
+  if (region) {
+    content += `\n<!--REGION:${region}-->`;
+  }
+  if (userEmail) {
+    content += `\n<!--EMAIL:${userEmail}-->`;
+  }
+
+  let imageUrls: string[] = [];
+  if (imagesJson) {
+    try {
+      imageUrls = JSON.parse(imagesJson);
+    } catch (e) {
+      console.error('Failed to parse images JSON', e);
+    }
+  }
+
+  if (imageUrls.length === 0) {
+    imageUrls = ['https://images.unsplash.com/photo-1546874177-9e664107314e?q=80&w=800'];
+  }
+
+  const imageUrlStr = JSON.stringify(imageUrls);
+
+  try {
+    const { error } = await supabase
+      .from('travelogues')
+      .update({
+        title,
+        author,
+        content,
+        image_url: imageUrlStr,
+      })
+      .eq('id', id);
+
+    if (error) return { success: false, error: error.message };
+    return { success: true };
+  } catch (error) {
+    console.error(error);
+    return { success: false };
+  }
+}
+
+export async function deletePost(id: number) {
+  const cookieStore = await cookies();
+  const userEmail = cookieStore.get('wave_session')?.value;
+
+  if (!userEmail) return { success: false, error: 'Unauthorized' };
+
+  try {
+    const { error } = await supabase
+      .from('travelogues')
+      .delete()
+      .eq('id', id);
+
+    if (error) return { success: false, error: error.message };
+    return { success: true };
+  } catch (error) {
+    console.error(error);
+    return { success: false };
   }
 }
