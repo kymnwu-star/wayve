@@ -18,6 +18,12 @@ export default function KakaoMap({ latitude = 35.1595454, longitude = 129.162598
   const [isLoaded, setIsLoaded] = useState(false);
 
   useEffect(() => {
+    if (typeof window !== 'undefined' && window.kakao && window.kakao.maps) {
+      setIsLoaded(true);
+    }
+  }, []);
+
+  useEffect(() => {
     if (isLoaded && window.kakao && window.kakao.maps) {
       window.kakao.maps.load(() => {
         const container = document.getElementById('kakao-map');
