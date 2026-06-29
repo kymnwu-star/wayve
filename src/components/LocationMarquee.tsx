@@ -2,11 +2,11 @@ import React from 'react';
 import styles from './LocationMarquee.module.css';
 
 const locations = [
-  { name: '영도 (Yeongdo)', imageUrl: 'https://images.unsplash.com/photo-1623940801831-417ceb6d5102?auto=format&fit=crop&q=80&w=800' },
-  { name: '감천문화마을 (Gamcheon)', imageUrl: 'https://images.unsplash.com/photo-1590393043818-e791244e82f7?auto=format&fit=crop&q=80&w=800' },
-  { name: '이바구길 (Ibagu-gil)', imageUrl: 'https://images.unsplash.com/photo-1578330768239-f9c3ff4b5952?auto=format&fit=crop&q=80&w=800' },
-  { name: '청사포 (Cheongsapo)', imageUrl: 'https://images.unsplash.com/photo-1522851410657-3f822a101b09?auto=format&fit=crop&q=80&w=800' },
-  { name: '용궁사 (Yonggungsa)', imageUrl: 'https://images.unsplash.com/photo-1582046206037-147eeec4a877?auto=format&fit=crop&q=80&w=800' },
+  { name: '영도 (Yeongdo)', imageUrl: '/images/daepyeong_night.jpg' },
+  { name: '감천문화마을 (Gamcheon)', imageUrl: 'https://images.unsplash.com/photo-1589828117730-22cba2d5e2e8?q=80&w=800' },
+  { name: '이바구길 (Ibagu-gil)', imageUrl: 'https://images.unsplash.com/photo-1605336496468-b7c126f59792?q=80&w=800' },
+  { name: '청사포 (Cheongsapo)', imageUrl: 'https://images.unsplash.com/photo-1596422846543-74c6d61d15db?q=80&w=800' },
+  { name: '용궁사 (Yonggungsa)', imageUrl: 'https://images.unsplash.com/photo-1574780517918-a6d5162a7587?q=80&w=800' },
 ];
 
 export default function LocationMarquee() {
