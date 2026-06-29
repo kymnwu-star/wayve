@@ -13,6 +13,15 @@ function formatPrice(price: number | string | null | undefined): string {
 }
 
 export default async function TourDetailPage({ params }: { params: Promise<{ id: string }> }) {
+  let krwRate = 1350;
+  try {
+    const rateRes = await fetch('https://open.er-api.com/v6/latest/USD', { next: { revalidate: 3600 } });
+    if (rateRes.ok) {
+      const rData = await rateRes.json();
+      krwRate = rData.rates.KRW;
+    }
+  } catch (e) {}
+
   const { id } = await params;
   let tour: any = null;
 
@@ -106,7 +115,12 @@ export default async function TourDetailPage({ params }: { params: Promise<{ id:
         </div>
         
         <div className={styles.infoSection}>
-          <div className={styles.price}>₩ {formatPrice(tour.timePrices['10:00'])} ~ {formatPrice(tour.timePrices['20:00'])} <span style={{fontSize: '1rem', color: '#888', fontWeight: 'normal'}}>시간별 차등 정가</span></div>
+          <div 
+            className={styles.price} 
+            title={`약 $${(tour.timePrices['10:00'] / krwRate).toFixed(2)} ~ $${(tour.timePrices['20:00'] / krwRate).toFixed(2)}`}
+          >
+            ₩ {formatPrice(tour.timePrices['10:00'])} ~ {formatPrice(tour.timePrices['20:00'])} <span style={{fontSize: '1rem', color: '#888', fontWeight: 'normal'}}>시간별 차등 정가</span>
+          </div>
           <p className={styles.description}>{tour.description}</p>
           
           <div className={styles.meta}>

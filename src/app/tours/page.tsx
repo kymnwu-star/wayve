@@ -13,6 +13,15 @@ function formatPrice(price: number | string | null | undefined): string {
 export const revalidate = 0; // 동적 렌더링 (DB 갱신시 바로 반영되도록 설정)
 
 export default async function ToursPage() {
+  let krwRate = 1350;
+  try {
+    const rateRes = await fetch('https://open.er-api.com/v6/latest/USD', { next: { revalidate: 3600 } });
+    if (rateRes.ok) {
+      const rData = await rateRes.json();
+      krwRate = rData.rates.KRW;
+    }
+  } catch (e) {}
+
   const categories = ['투어&액티비티', '티켓', 'stay', 'Shop'];
 
   // DB에서 데이터 가져오기 (에러가 나도 더미 데이터는 보이게 처리)
@@ -74,7 +83,7 @@ export default async function ToursPage() {
                     <p className={styles.cardDesc}>{tour.description}</p>
                     <div className={styles.cardFooter}>
                       <span className={styles.duration}>⏱ {tour.duration}</span>
-                      <span className={styles.price}>₩ {tour.price}</span>
+                      <span className={styles.price} title={`약 $${(parseInt(tour.price.replace(/,/g, ''), 10) / krwRate).toFixed(2)}`}>₩ {tour.price}</span>
                     </div>
                   </div>
                 </Link>
