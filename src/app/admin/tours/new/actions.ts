@@ -36,14 +36,13 @@ export async function createTour(formData: FormData) {
   const category = formData.get('category') as string;
   const imageUrl = formData.get('imageUrl') as string;
 
-  let redirectUrl = '';
+  const fullDescription = description + `\n\n<!--TIME_PRICES:${JSON.stringify(time_prices)}-->`;
 
   try {
     const { error } = await supabase.from('tours').insert([{
       title,
-      description,
+      description: fullDescription,
       price: basePrice,
-      time_prices: time_prices,
       duration,
       max_capacity: parseInt(maxCapacity, 10),
       category,

@@ -36,20 +36,33 @@ export default async function TourDetailPage({ params }: { params: Promise<{ id:
     try {
       const { data } = await supabase.from('tours').select('*').eq('id', parseInt(id, 10)).single();
       if (data) {
+        let timePrices = {
+          '10:00': data.price,
+          '14:00': data.price,
+          '18:00': data.price,
+          '20:00': data.price,
+        };
+        let cleanDescription = data.description || '상세 설명이 없습니다.';
+        
+        if (cleanDescription.includes('<!--TIME_PRICES:')) {
+          const match = cleanDescription.match(/<!--TIME_PRICES:(.*)-->/);
+          if (match) {
+            try {
+              timePrices = JSON.parse(match[1]);
+              cleanDescription = cleanDescription.replace(/<!--TIME_PRICES:.*-->/, '').trim();
+            } catch(e) {}
+          }
+        }
+
         tour = {
           id: data.id.toString(),
           category: data.category || 'Night Exploration',
           icon: data.category === 'Marine Cruise' ? '🚢' : data.category === 'Boutique Coffee' ? '☕' : '🌙',
           title: data.title || 'Untitled Tour',
-          description: data.description || '상세 설명이 없습니다.',
+          description: cleanDescription,
           price: formatPrice(data.price),
           priceNum: data.price,
-          timePrices: data.time_prices || {
-            '10:00': data.price,
-            '14:00': data.price,
-            '18:00': data.price,
-            '20:00': data.price,
-          },
+          timePrices: timePrices,
           duration: data.duration || '2시간',
           imageUrl: data.image_url || 'https://images.unsplash.com/photo-1512453979798-5ea266f8880c?q=80&w=800'
         };

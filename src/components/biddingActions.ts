@@ -23,15 +23,22 @@ export async function submitBid(formData: FormData) {
     // 투어의 정가(판매자 지정 가격) 및 시간대별 가격 조회
     const { data: tourData } = await supabase
       .from('tours')
-      .select('price, time_prices')
+      .select('price, description')
       .eq('id', tourId)
       .single();
       
     if (tourData) {
-      if (tourData.time_prices && typeof tourData.time_prices === 'object') {
-        tourPrice = (tourData.time_prices as any)[timeSlot] || tourData.price;
-      } else {
-        tourPrice = tourData.price;
+      tourPrice = tourData.price;
+      if (tourData.description && tourData.description.includes('<!--TIME_PRICES:')) {
+        const match = tourData.description.match(/<!--TIME_PRICES:(.*)-->/);
+        if (match) {
+          try {
+            const parsed = JSON.parse(match[1]);
+            if (parsed && typeof parsed === 'object') {
+              tourPrice = parsed[timeSlot] || tourData.price;
+            }
+          } catch (e) {}
+        }
       }
     }
   }
