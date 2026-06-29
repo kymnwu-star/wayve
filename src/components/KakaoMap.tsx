@@ -1,7 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-import Script from 'next/script';
+import { useEffect, useState, useRef } from 'react';
 
 interface KakaoMapProps {
   latitude?: number;
@@ -16,6 +15,7 @@ declare global {
 
 export default function KakaoMap({ latitude = 35.1595454, longitude = 129.1625985 }: KakaoMapProps) {
   const [isLoaded, setIsLoaded] = useState(false);
+  const mapRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (typeof window === 'undefined') return;
@@ -39,9 +39,9 @@ export default function KakaoMap({ latitude = 35.1595454, longitude = 129.162598
   }, []);
 
   useEffect(() => {
-    if (isLoaded && window.kakao && window.kakao.maps) {
+    if (isLoaded && window.kakao && window.kakao.maps && mapRef.current) {
       window.kakao.maps.load(() => {
-        const container = document.getElementById('kakao-map');
+        const container = mapRef.current;
         if (!container) return;
         
         // Remove existing children if React re-rendered
@@ -66,10 +66,10 @@ export default function KakaoMap({ latitude = 35.1595454, longitude = 129.162598
 
   return (
     <div 
-      id="kakao-map" 
-      style={{ width: '100%', height: '300px', borderRadius: '12px', marginTop: '1.5rem', background: '#222' }}
+      ref={mapRef}
+      style={{ width: '100%', height: '300px', borderRadius: '12px', marginTop: '1.5rem', background: '#222', position: 'relative' }}
     >
-      {!isLoaded && <div style={{display:'flex', height:'100%', justifyContent:'center', alignItems:'center', color:'#888'}}>지도를 불러오는 중...</div>}
+      {!isLoaded && <div style={{display:'flex', height:'100%', justifyContent:'center', alignItems:'center', color:'#888', position: 'absolute', top: 0, left: 0, right: 0, bottom: 0}}>지도를 불러오는 중...</div>}
     </div>
   );
 }
