@@ -88,6 +88,12 @@ html {
   color: var(--accent);
 }
 
+.tooltip-container {
+  position: relative;
+  display: inline-block;
+  cursor: help;
+}
+
 .tooltip-container::after {
   content: attr(data-tooltip);
   position: absolute;
@@ -124,6 +130,13 @@ html {
   transition: opacity 0.2s ease-in-out, transform 0.2s ease-in-out;
   z-index: 1000;
   pointer-events: none;
+}
+
+.tooltip-container:hover::after,
+.tooltip-container:hover::before {
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(-50%) translateY(0);
 }
 
 .main-header nav .btn-login {
