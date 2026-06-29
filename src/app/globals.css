@@ -88,6 +88,44 @@ html {
   color: var(--accent);
 }
 
+.tooltip-container::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  bottom: 100%; 
+  left: 50%;
+  transform: translateX(-50%) translateY(-12px);
+  background-color: #111;
+  color: var(--accent);
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-size: 2.5rem;
+  font-weight: 900;
+  white-space: nowrap;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.2s ease-in-out, transform 0.2s ease-in-out;
+  z-index: 1000;
+  pointer-events: none;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.8);
+  border: 2px solid var(--accent);
+}
+
+.tooltip-container::before {
+  content: '';
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%) translateY(2px);
+  border-width: 8px 8px 0 8px;
+  border-style: solid;
+  border-color: var(--accent) transparent transparent transparent;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.2s ease-in-out, transform 0.2s ease-in-out;
+  z-index: 1000;
+  pointer-events: none;
+}
+
 .main-header nav .btn-login {
   border: 1px solid var(--accent);
   padding: 0.5rem 1rem;
