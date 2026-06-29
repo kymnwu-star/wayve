@@ -14,7 +14,7 @@ export default function ForgotPasswordPage() {
 
   const [step, setStep] = useState<Step>('EMAIL_INPUT');
   const [email, setEmail] = useState('');
-  const [sheetTitle, setSheetTitle] = useState('');
+  const [tableName, setTableName] = useState('');
   
   // 모의 인증 코드 (프로토타입)
   const [generatedCode, setGeneratedCode] = useState('');
@@ -32,8 +32,8 @@ export default function ForgotPasswordPage() {
 
     startTransition(async () => {
       const res = await checkEmailAndSendCode(email);
-      if (res.success && res.sheetTitle) {
-        setSheetTitle(res.sheetTitle);
+      if (res.success && res.tableName) {
+        setTableName(res.tableName);
         // 프로토타입: 랜덤 6자리 생성 및 팝업 (원래는 이메일 발송됨)
         const code = Math.floor(100000 + Math.random() * 900000).toString();
         setGeneratedCode(code);
@@ -69,7 +69,7 @@ export default function ForgotPasswordPage() {
     }
 
     startTransition(async () => {
-      const res = await updatePassword(email, newPassword, sheetTitle);
+      const res = await updatePassword(email, newPassword, tableName);
       if (res.success) {
         alert('비밀번호가 성공적으로 변경되었습니다! 새 비밀번호로 로그인해 주세요.');
         router.push('/login');

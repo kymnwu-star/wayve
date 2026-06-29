@@ -24,7 +24,7 @@ export async function checkEmailAndSendCode(email: string) {
 
     if (foundTableName) {
       // (프로토타입) 실제 이메일을 쏘는 대신 프론트엔드에서 모의 코드를 띄우기 위해 success만 반환
-      return { success: true, sheetTitle: foundTableName };
+      return { success: true, tableName: foundTableName };
     } else {
       return { success: false, error: '가입되지 않은 이메일입니다.' };
     }
