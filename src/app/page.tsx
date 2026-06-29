@@ -60,6 +60,11 @@ export default async function Home() {
               <h3>stay</h3>
               <p>프리미엄 호텔부터 감성 넘치는 로컬 숙소까지 완벽한 휴식.</p>
             </div>
+            <div className={styles.heroCard}>
+              <div className={styles.heroIconWrapper}>🛍️</div>
+              <h3>Shop</h3>
+              <p>부산 로컬 크리에이터의 감각이 담긴 특별한 굿즈와 특산품.</p>
+            </div>
           </div>
         </div>
         <div className={styles.heroRightContent}>
