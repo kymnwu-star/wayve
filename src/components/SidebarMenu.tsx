@@ -62,6 +62,7 @@ export default function SidebarMenu({ role, email }: SidebarMenuProps) {
                 <div className={styles.profileName}>{displayEmail} 파트너</div>
               </div>
               <ul className={styles.menuList}>
+                <li><Link href="/partner/dashboard" onClick={() => setIsOpen(false)}>대시보드</Link></li>
                 <li><Link href="/admin/tours/new" onClick={() => setIsOpen(false)}>상품등록</Link></li>
                 <li><Link href="#" onClick={() => setIsOpen(false)}>정산</Link></li>
                 <li><Link href="#" onClick={() => setIsOpen(false)}>문의</Link></li>

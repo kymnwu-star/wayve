@@ -37,6 +37,18 @@ export default async function PartnerDashboard() {
     console.error('Error fetching bids:', err);
   }
 
+  // Fetch total bids count
+  let totalBidsCount = 0;
+  try {
+    const { count } = await supabase
+      .from('bidding_requests')
+      .select('*', { count: 'exact', head: true });
+    
+    totalBidsCount = count || 0;
+  } catch (err) {
+    console.error('Error fetching total bids:', err);
+  }
+
   // Server Actions for Accept/Reject
   async function acceptBid(formData: FormData) {
     'use server';
@@ -132,6 +144,11 @@ export default async function PartnerDashboard() {
           <div className={`${styles.card} ${styles.statCard}`}>
             <h3 className={styles.cardTitle}>진행 중인 투어</h3>
             <div className={styles.statValue}>14건</div>
+          </div>
+
+          <div className={`${styles.card} ${styles.statCard}`}>
+            <h3 className={styles.cardTitle}>누적 입찰 제안 건수</h3>
+            <div className={styles.statValue} style={{ color: 'var(--accent)' }}>{totalBidsCount}건</div>
           </div>
         </div>
       </div>
