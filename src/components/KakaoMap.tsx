@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import Script from 'next/script';
 
 interface KakaoMapProps {
@@ -15,33 +15,35 @@ declare global {
 }
 
 export default function KakaoMap({ latitude = 35.1595454, longitude = 129.1625985 }: KakaoMapProps) {
-  
-  const initMap = () => {
-    if (window.kakao && window.kakao.maps) {
+  const [isLoaded, setIsLoaded] = useState(false);
+
+  useEffect(() => {
+    if (isLoaded && window.kakao && window.kakao.maps) {
       window.kakao.maps.load(() => {
         const container = document.getElementById('kakao-map');
+        if (!container) return;
+        
         const options = {
           center: new window.kakao.maps.LatLng(latitude, longitude),
           level: 4,
         };
         const map = new window.kakao.maps.Map(container, options);
         
-        // 마커 생성
-        const markerPosition  = new window.kakao.maps.LatLng(latitude, longitude); 
+        const markerPosition = new window.kakao.maps.LatLng(latitude, longitude); 
         const marker = new window.kakao.maps.Marker({
             position: markerPosition
         });
         marker.setMap(map);
       });
     }
-  };
+  }, [isLoaded, latitude, longitude]);
 
   return (
     <>
       <Script
-        strategy="lazyOnload"
-        src={`//dapi.kakao.com/v2/maps/sdk.js?appkey=${process.env.NEXT_PUBLIC_KAKAO_APP_KEY}&autoload=false`}
-        onLoad={initMap}
+        strategy="afterInteractive"
+        src={`//dapi.kakao.com/v2/maps/sdk.js?appkey=7ff26c6aeb4799e58f60679f26fa69b7&autoload=false`}
+        onLoad={() => setIsLoaded(true)}
       />
       <div 
         id="kakao-map" 
