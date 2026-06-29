@@ -52,14 +52,31 @@ export default function BiddingSection({ tourId, originalPrice }: Props) {
 
       <div className={styles.inputGroup}>
         <label>이용 날짜</label>
-        <input 
-          type="date" 
-          className={styles.input}
-          value={date}
-          onChange={(e) => setDate(e.target.value)}
-          required
-          min={new Date().toISOString().split('T')[0]}
-        />
+        <div className={styles.calendarWrapper}>
+          <input 
+            type="date" 
+            id="biddingDate"
+            className={styles.hiddenDateInput}
+            value={date}
+            onChange={(e) => setDate(e.target.value)}
+            required
+            min={new Date().toISOString().split('T')[0]}
+          />
+          <button 
+            type="button" 
+            className={styles.calendarBtn}
+            onClick={() => {
+              const input = document.getElementById('biddingDate');
+              if (input && 'showPicker' in input) {
+                (input as any).showPicker();
+              } else {
+                input?.focus();
+              }
+            }}
+          >
+            📅 달력에서 날짜 선택하기 {date ? `[ ${date} ]` : ''}
+          </button>
+        </div>
       </div>
 
       <div className={styles.inputGroup}>

@@ -69,3 +69,40 @@
   font-size: 0.85rem;
   margin-top: 0.2rem;
 }
+
+.calendarWrapper {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+.hiddenDateInput {
+  position: absolute;
+  top: 0;
+  left: 0;
+  opacity: 0;
+  width: 1px;
+  height: 1px;
+  pointer-events: none;
+}
+
+.calendarBtn {
+  padding: 1rem;
+  background-color: #1a1a24;
+  color: #fff;
+  border: 1px solid var(--surface-border);
+  border-radius: 8px;
+  font-size: 1.05rem;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: all 0.2s ease;
+  font-weight: 600;
+}
+
+.calendarBtn:hover {
+  border-color: var(--accent);
+  background-color: rgba(212, 255, 0, 0.05);
+  color: var(--accent);
+}
