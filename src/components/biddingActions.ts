@@ -20,15 +20,19 @@ export async function submitBid(formData: FormData) {
   
   if (!tourIdStr.startsWith('dummy-')) {
     tourId = parseInt(tourIdStr, 10);
-    // 투어의 정가(판매자 지정 가격) 조회
+    // 투어의 정가(판매자 지정 가격) 및 시간대별 가격 조회
     const { data: tourData } = await supabase
       .from('tours')
-      .select('price')
+      .select('price, time_prices')
       .eq('id', tourId)
       .single();
       
     if (tourData) {
-      tourPrice = tourData.price;
+      if (tourData.time_prices && typeof tourData.time_prices === 'object') {
+        tourPrice = (tourData.time_prices as any)[timeSlot] || tourData.price;
+      } else {
+        tourPrice = tourData.price;
+      }
     }
   }
 

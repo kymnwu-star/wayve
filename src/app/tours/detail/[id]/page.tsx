@@ -19,10 +19,16 @@ export default async function TourDetailPage({ params }: { params: Promise<{ id:
   if (id.startsWith('dummy-')) {
     tour = dummyTours.find(t => t.id === id);
     if (tour) {
-      // transform price back to number for component
+      const priceNum = parseInt(tour.price.replace(/,/g, ''), 10);
       tour = {
         ...tour,
-        priceNum: parseInt(tour.price.replace(/,/g, ''), 10)
+        priceNum: priceNum,
+        timePrices: {
+          '10:00': priceNum,
+          '14:00': priceNum,
+          '18:00': priceNum,
+          '20:00': priceNum,
+        }
       };
     }
   } else {
@@ -38,6 +44,12 @@ export default async function TourDetailPage({ params }: { params: Promise<{ id:
           description: data.description || '상세 설명이 없습니다.',
           price: formatPrice(data.price),
           priceNum: data.price,
+          timePrices: data.time_prices || {
+            '10:00': data.price,
+            '14:00': data.price,
+            '18:00': data.price,
+            '20:00': data.price,
+          },
           duration: data.duration || '2시간',
           imageUrl: data.image_url || 'https://images.unsplash.com/photo-1512453979798-5ea266f8880c?q=80&w=800'
         };
@@ -68,7 +80,7 @@ export default async function TourDetailPage({ params }: { params: Promise<{ id:
         </div>
         
         <div className={styles.infoSection}>
-          <div className={styles.price}>₩ {tour.price} <span style={{fontSize: '1rem', color: '#888', fontWeight: 'normal'}}>정가</span></div>
+          <div className={styles.price}>₩ {formatPrice(tour.timePrices['10:00'])} ~ {formatPrice(tour.timePrices['20:00'])} <span style={{fontSize: '1rem', color: '#888', fontWeight: 'normal'}}>시간별 차등 정가</span></div>
           <p className={styles.description}>{tour.description}</p>
           
           <div className={styles.meta}>
@@ -76,7 +88,7 @@ export default async function TourDetailPage({ params }: { params: Promise<{ id:
           </div>
 
           <div className={styles.biddingContainer}>
-            <BiddingSection tourId={tour.id} originalPrice={tour.priceNum} />
+            <BiddingSection tourId={tour.id} timePrices={tour.timePrices} />
           </div>
         </div>
       </div>

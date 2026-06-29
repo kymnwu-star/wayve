@@ -7,18 +7,19 @@ import { submitBid } from './biddingActions';
 
 interface Props {
   tourId: string | number;
-  originalPrice: number;
+  timePrices: { [key: string]: number };
 }
 
-export default function BiddingSection({ tourId, originalPrice }: Props) {
+export default function BiddingSection({ tourId, timePrices }: Props) {
   const router = useRouter();
   const [date, setDate] = useState('');
   const [timeSlot, setTimeSlot] = useState('10:00');
   const [bidPrice, setBidPrice] = useState<number | ''>('');
   const [isLoading, setIsLoading] = useState(false);
 
-  // 하한선: 정가의 70%
-  const minimumPrice = Math.floor(originalPrice * 0.7);
+  const currentSlotPrice = timePrices[timeSlot] || timePrices['10:00'] || 0;
+  // 하한선: 선택된 시간대 정가의 70%
+  const minimumPrice = Math.floor(currentSlotPrice * 0.7);
   const isBelowFloor = bidPrice !== '' && bidPrice < minimumPrice;
 
   const handleSubmit = async (e: React.FormEvent) => {

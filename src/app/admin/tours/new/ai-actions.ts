@@ -41,7 +41,10 @@ export async function analyzeImage(imageUrl: string) {
       조건:
       - title: 직관적이고 매력적인 투어 제목 (예: 해운대 문라이트 프라이빗 요트 세션)
       - description: 이미지의 분위기가 잘 드러나는 서정적이고 구체적인 투어 설명 (2~3문장)
-      - price: 30000에서 150000 사이의 적절한 가격 (숫자만, 예: 65000)
+      - price_10: 오전 10시 기준 가격 (숫자만, 예: 45000)
+      - price_14: 오후 2시 기준 가격 (숫자만, 예: 45000)
+      - price_18: 오후 6시 피크타임 기준 가격 (숫자만, 예: 55000)
+      - price_20: 오후 8시 심야/야경 기준 가격 (숫자만, 예: 65000)
       - duration: 예상 소요 시간 (예: 2 hours, 3 hours)
       - maxCapacity: 예상 최대 인원 (예: 4, 6, 8, 12 중 하나)
       - category: "투어&액티비티", "티켓", "stay", "Shop" 중 사진에 가장 잘 맞는 것 하나
@@ -50,7 +53,10 @@ export async function analyzeImage(imageUrl: string) {
       {
         "title": "...",
         "description": "...",
-        "price": "...",
+        "price_10": 45000,
+        "price_14": 45000,
+        "price_18": 55000,
+        "price_20": 65000,
         "duration": "...",
         "maxCapacity": "...",
         "category": "..."

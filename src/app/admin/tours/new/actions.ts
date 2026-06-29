@@ -17,7 +17,20 @@ export async function createTour(formData: FormData) {
   // 2. 폼 데이터 추출
   const title = formData.get('title') as string;
   const description = formData.get('description') as string;
-  const price = formData.get('price') as string;
+  const price_10 = parseInt(formData.get('price_10') as string, 10);
+  const price_14 = parseInt(formData.get('price_14') as string, 10);
+  const price_18 = parseInt(formData.get('price_18') as string, 10);
+  const price_20 = parseInt(formData.get('price_20') as string, 10);
+  
+  const time_prices = {
+    '10:00': price_10,
+    '14:00': price_14,
+    '18:00': price_18,
+    '20:00': price_20
+  };
+  
+  const basePrice = Math.min(price_10, price_14, price_18, price_20);
+
   const duration = formData.get('duration') as string;
   const maxCapacity = formData.get('maxCapacity') as string;
   const category = formData.get('category') as string;
@@ -29,7 +42,8 @@ export async function createTour(formData: FormData) {
     const { error } = await supabase.from('tours').insert([{
       title,
       description,
-      price: parseInt(price, 10),
+      price: basePrice,
+      time_prices: time_prices,
       duration,
       max_capacity: parseInt(maxCapacity, 10),
       category,

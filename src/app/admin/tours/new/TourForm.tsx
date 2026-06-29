@@ -14,7 +14,10 @@ export default function TourForm() {
   const [formData, setFormData] = useState({
     title: '',
     description: '',
-    price: '',
+    price_10: '',
+    price_14: '',
+    price_18: '',
+    price_20: '',
     duration: '',
     maxCapacity: '',
     category: '',
@@ -104,7 +107,10 @@ export default function TourForm() {
           ...prev,
           title: parsedResult.data.title || prev.title,
           description: parsedResult.data.description || prev.description,
-          price: parsedResult.data.price || prev.price,
+          price_10: parsedResult.data.price_10 || prev.price_10,
+          price_14: parsedResult.data.price_14 || prev.price_14,
+          price_18: parsedResult.data.price_18 || prev.price_18,
+          price_20: parsedResult.data.price_20 || prev.price_20,
           duration: parsedResult.data.duration || prev.duration,
           maxCapacity: parsedResult.data.maxCapacity || prev.maxCapacity,
           category: parsedResult.data.category || prev.category
@@ -127,7 +133,7 @@ export default function TourForm() {
     if (form.checkValidity()) {
       startTransition(() => {
         createTour(new FormData(form));
-        setFormData({ title: '', description: '', price: '', duration: '', maxCapacity: '', category: '', imageUrl: '' });
+        setFormData({ title: '', description: '', price_10: '', price_14: '', price_18: '', price_20: '', duration: '', maxCapacity: '', category: '', imageUrl: '' });
         setSelectedFile(null);
         if (fileInputRef.current) fileInputRef.current.value = '';
       });
@@ -201,8 +207,25 @@ export default function TourForm() {
       </div>
 
       <div className={styles.inputGroup}>
-        <label htmlFor="price">Price (KRW)</label>
-        <input id="price" name="price" type="number" required placeholder="예: 55000" value={formData.price} onChange={handleChange} />
+        <label>기준 가격 (KRW) - 시간대별 설정</label>
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+          <div>
+            <label style={{fontSize: '0.8rem', color: '#ccc'}}>오전 10:00</label>
+            <input name="price_10" type="number" required placeholder="예: 50000" value={formData.price_10} onChange={handleChange} />
+          </div>
+          <div>
+            <label style={{fontSize: '0.8rem', color: '#ccc'}}>오후 2:00</label>
+            <input name="price_14" type="number" required placeholder="예: 50000" value={formData.price_14} onChange={handleChange} />
+          </div>
+          <div>
+            <label style={{fontSize: '0.8rem', color: '#ccc'}}>오후 6:00</label>
+            <input name="price_18" type="number" required placeholder="예: 60000" value={formData.price_18} onChange={handleChange} />
+          </div>
+          <div>
+            <label style={{fontSize: '0.8rem', color: '#ccc'}}>오후 8:00 (심야)</label>
+            <input name="price_20" type="number" required placeholder="예: 65000" value={formData.price_20} onChange={handleChange} />
+          </div>
+        </div>
       </div>
 
       <div className={styles.inputGroup}>
