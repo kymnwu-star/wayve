@@ -6,73 +6,9 @@ import { createPost, updatePost, deletePost } from './actions';
 import { supabase } from '@/utils/supabase';
 import styles from './page.module.css';
 
-// Mock Data for 5 posts
-const initialMockPosts = [
-  {
-    id: 1,
-    region: '부산',
-    author: 'Jihoon.K',
-    title: '영도의 날것',
-    avatarLetter: 'J',
-    time: '2 hours ago',
-    imageUrl: 'https://images.unsplash.com/photo-1546874177-9e664107314e?q=80&w=800',
-    content: '영도 해녀촌에서 바라본 남항대교 야경. 언제 와도 영도의 밤은 거칠지만 매력적이다. 다음번엔 심야 투어에도 참여해봐야지. 🌙',
-    likes: 42,
-    comments: 5
-  },
-  {
-    id: 2,
-    region: '부산',
-    author: 'Sarah Traveler',
-    title: '광안리 요트 크루징',
-    avatarLetter: 'S',
-    time: '5 hours ago',
-    imageUrl: 'https://images.unsplash.com/photo-1580214371493-277ba5bbda32?q=80&w=800',
-    content: '광안리 선셋 요트 크루징... 와인 한 잔과 함께 듣는 어쿠스틱 라이브가 최고였다. Wayve 프리미엄 투어 강추합니다! 🍷🛥️',
-    likes: 128,
-    comments: 12
-  },
-  {
-    id: 3,
-    region: '부산',
-    author: '로컬탐험가',
-    title: '전포동 커피 마스터',
-    avatarLetter: '로',
-    time: '1 day ago',
-    imageUrl: 'https://images.unsplash.com/photo-1603525281488-8422731cde7e?q=80&w=800',
-    content: '전포동 뒷골목 로컬 브루어리에서 바리스타님과 깊은 대화. 유명한 프랜차이즈에서는 절대 느낄 수 없는 깊은 맛이었다. ☕',
-    likes: 85,
-    comments: 3
-  },
-  {
-    id: 4,
-    region: '부산 외',
-    author: '마이크',
-    title: '두바이 사막 투어',
-    avatarLetter: 'M',
-    time: '2 days ago',
-    imageUrl: 'https://images.unsplash.com/photo-1512453979798-5ea266f8880c?q=80&w=800',
-    content: '두바이 사막 한가운데서 즐긴 에디토리얼 투어. 부산의 바다와는 또 다른 압도적인 느낌이었다. 다음 여행지는 어디로 할까?',
-    likes: 256,
-    comments: 45
-  },
-  {
-    id: 5,
-    region: '부산 외',
-    author: 'Tokyo Drifter',
-    title: '도쿄의 심야 식당',
-    avatarLetter: 'T',
-    time: '3 days ago',
-    imageUrl: ['https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?q=80&w=800'],
-    content: '도쿄 밤거리의 네온사인 아래. Wayve에서 추천해준 프라이빗 이자카야는 정말 신의 한 수였다. 관광객은 나 혼자뿐이었음! 🍣🏮',
-    likes: 194,
-    comments: 21
-  }
-];
-
 export default function TravelogueClient({ currentUserEmail, currentUserNickname }: { currentUserEmail: string | null, currentUserNickname: string | null }) {
   const [activeTab, setActiveTab] = useState<'부산' | '부산 외'>('부산');
-  const [posts, setPosts] = useState(initialMockPosts.map(p => ({...p, imageUrls: Array.isArray(p.imageUrl) ? p.imageUrl : [p.imageUrl]})));
+  const [posts, setPosts] = useState<any[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingPost, setEditingPost] = useState<any>(null);
   const [isPending, startTransition] = useTransition();
@@ -133,10 +69,7 @@ export default function TravelogueClient({ currentUserEmail, currentUserNickname
             };
           });
 
-          setPosts(() => {
-            const mockFormatted = initialMockPosts.map(p => ({...p, imageUrls: Array.isArray(p.imageUrl) ? p.imageUrl : [p.imageUrl]}));
-            return [...dbPosts, ...mockFormatted];
-          });
+          setPosts(dbPosts);
         }
       } catch (err) {
         console.error('Error fetching travelogues', err);
