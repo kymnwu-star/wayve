@@ -12,8 +12,13 @@ export default function TravelogueClient({ currentUserEmail, currentUserNickname
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingPost, setEditingPost] = useState<any>(null);
   const [isPending, startTransition] = useTransition();
+  const [expandedPosts, setExpandedPosts] = useState<Record<string, boolean>>({});
   const [previewImages, setPreviewImages] = useState<string[]>([]);
   const MAX_IMAGES = 9;
+
+  const toggleExpand = (id: string) => {
+    setExpandedPosts(prev => ({ ...prev, [id]: !prev[id] }));
+  };
 
   const filteredPosts = posts.filter(post => post.region === activeTab);
 
@@ -232,9 +237,18 @@ export default function TravelogueClient({ currentUserEmail, currentUserNickname
                 ))}
               </div>
 
-              <div className={styles.postContent}>
+              <div 
+                className={styles.postContent}
+                onClick={() => toggleExpand(post.id)}
+                style={{ cursor: 'pointer' }}
+              >
                 <strong style={{ display: 'block', marginBottom: '0.5rem', color: '#fff' }}>{post.title}</strong>
-                {post.content}
+                <p className={`${styles.textContent} ${expandedPosts[post.id] ? styles.expanded : styles.collapsed}`}>
+                  {post.content}
+                </p>
+                {!expandedPosts[post.id] && (
+                  <span style={{ color: '#888', fontSize: '0.85rem', display: 'block', marginTop: '0.5rem' }}>...더보기</span>
+                )}
               </div>
 
               <div className={styles.postFooter}>
