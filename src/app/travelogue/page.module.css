@@ -362,51 +362,26 @@
   z-index: 10;
 }
 
-.postImageGrid {
-  display: grid;
-  gap: 2px;
-  margin-bottom: 1rem;
-  border-radius: 8px;
-  overflow: hidden;
-}
-
-.postImageGrid[data-count="1"] {
-  grid-template-columns: 1fr;
-}
-
-.postImageGrid[data-count="2"] {
-  grid-template-columns: 1fr 1fr;
-  height: 350px;
-}
-
-.postImageGrid[data-count="3"] {
-  grid-template-columns: 1fr 1fr;
-  grid-template-rows: 1fr 1fr;
-  height: 400px;
-}
-.postImageGrid[data-count="3"] > div:first-child {
-  grid-row: 1 / -1;
-}
-
-.postImageGrid[data-count="4"] {
-  grid-template-columns: 1fr 1fr;
-  grid-template-rows: 1fr 1fr;
-  height: 400px;
-}
-
-.postImageGrid[data-count="more"] {
-  grid-template-columns: repeat(3, 1fr);
-  grid-auto-rows: 120px;
-}
-
-.moreImagesOverlay {
-  position: absolute;
-  top: 0; left: 0; right: 0; bottom: 0;
-  background: rgba(0,0,0,0.6);
+.postImageSlider {
   display: flex;
-  align-items: center;
-  justify-content: center;
-  color: white;
-  font-size: 1.5rem;
-  font-weight: bold;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  gap: 0;
+  width: 100%;
+  border-radius: 8px;
+  scrollbar-width: none; /* Firefox */
+  margin-bottom: 1rem;
+}
+
+.postImageSlider::-webkit-scrollbar {
+  display: none; /* Chrome, Safari */
+}
+
+.sliderItem {
+  flex: 0 0 100%;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  position: relative;
+  scroll-snap-align: start;
 }

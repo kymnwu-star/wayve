@@ -218,21 +218,16 @@ export default function TravelogueClient({ currentUserEmail, currentUserNickname
                 )}
               </div>
               
-              <div className={styles.postImageGrid} data-count={post.imageUrls.length > 4 ? 'more' : post.imageUrls.length}>
-                {post.imageUrls.slice(0, 4).map((imgUrl: string, idx: number) => (
-                  <div key={idx} style={{ position: 'relative', width: '100%', height: '100%', minHeight: '150px' }}>
+              <div className={styles.postImageSlider}>
+                {post.imageUrls.map((imgUrl: string, idx: number) => (
+                  <div key={idx} className={styles.sliderItem}>
                     <Image 
                       src={imgUrl} 
                       alt={`${post.author}의 여행 사진 ${idx + 1}`}
                       fill
                       style={{ objectFit: 'cover' }}
-                      sizes="(max-width: 768px) 85vw, 350px"
+                      sizes="(max-width: 768px) 100vw, 600px"
                     />
-                    {idx === 3 && post.imageUrls.length > 4 && (
-                      <div className={styles.moreImagesOverlay}>
-                        +{post.imageUrls.length - 4}
-                      </div>
-                    )}
                   </div>
                 ))}
               </div>
