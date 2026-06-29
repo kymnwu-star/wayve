@@ -70,7 +70,7 @@ const initialMockPosts = [
   }
 ];
 
-export default function TravelogueClient({ currentUserEmail }: { currentUserEmail: string | null }) {
+export default function TravelogueClient({ currentUserEmail, currentUserNickname }: { currentUserEmail: string | null, currentUserNickname: string | null }) {
   const [activeTab, setActiveTab] = useState<'부산' | '부산 외'>('부산');
   const [posts, setPosts] = useState(initialMockPosts.map(p => ({...p, imageUrls: Array.isArray(p.imageUrl) ? p.imageUrl : [p.imageUrl]})));
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -366,7 +366,17 @@ export default function TravelogueClient({ currentUserEmail }: { currentUserEmai
               </div>
               <div className={styles.formGroup}>
                 <label htmlFor="author">작성자 (닉네임)</label>
-                <input id="author" name="author" type="text" className={styles.modalInput} required placeholder="예: 로컬탐험가" defaultValue={editingPost?.author || ''} />
+                <input 
+                  id="author" 
+                  name="author" 
+                  type="text" 
+                  className={styles.modalInput} 
+                  required 
+                  placeholder="예: 로컬탐험가" 
+                  defaultValue={editingPost?.author || currentUserNickname || ''} 
+                  readOnly={!!currentUserNickname}
+                  style={currentUserNickname ? { backgroundColor: '#333', color: '#999', cursor: 'not-allowed' } : {}}
+                />
               </div>
               <div className={styles.formGroup}>
                 <label htmlFor="region">지역</label>

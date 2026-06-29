@@ -56,9 +56,24 @@ export async function login(formData: FormData) {
     }
 
     if (foundUser) {
-      const cookieStore = await cookies()
-      cookieStore.set('wave_session', email, { maxAge: 60 * 60 * 24 })
-      cookieStore.set('wave_role', userRole, { maxAge: 60 * 60 * 24 })
+      const cookieStore = await cookies();
+      cookieStore.set('wave_session', email, { 
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        maxAge: 60 * 60 * 24 * 7 // 1 week
+      });
+      cookieStore.set('wave_role', userRole, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        maxAge: 60 * 60 * 24 * 7 // 1 week
+      });
+      if (foundUser.nickname) {
+        cookieStore.set('wave_nickname', foundUser.nickname, {
+          httpOnly: false, // Make accessible to client if needed, or pass via server
+          secure: process.env.NODE_ENV === 'production',
+          maxAge: 60 * 60 * 24 * 7
+        });
+      }
       
       if (userRole === 'Partner') {
         redirectUrl = '/partner/dashboard';
@@ -82,6 +97,7 @@ export async function login(formData: FormData) {
 export async function signupTourist(formData: FormData) {
   const email = formData.get('email') as string;
   const password = formData.get('password') as string;
+  const nickname = formData.get('nickname') as string || '';
   const gender = formData.get('gender') as string || '';
   const country = formData.get('country') as string || '';
   const travelType = formData.get('travelType') as string || '';
@@ -99,6 +115,7 @@ export async function signupTourist(formData: FormData) {
       await supabase.from('tourists').insert([{
         email,
         password,
+        nickname,
         gender,
         country,
         travel_type: travelType,

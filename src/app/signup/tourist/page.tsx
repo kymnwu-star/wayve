@@ -33,6 +33,10 @@ export default function TouristSignupPage() {
               <input id="email" name="email" type="email" required placeholder="loveler@example.com" />
             </div>
             <div className={styles.inputGroup}>
+              <label htmlFor="nickname">Nickname</label>
+              <input id="nickname" name="nickname" type="text" required placeholder="예: 로컬탐험가" />
+            </div>
+            <div className={styles.inputGroup}>
               <label htmlFor="password">Password</label>
               <input id="password" name="password" type="password" required placeholder="••••••••" />
             </div>
