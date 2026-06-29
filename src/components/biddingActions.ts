@@ -16,9 +16,24 @@ export async function submitBid(formData: FormData) {
   // 여기서는 bigint references tours(id) 이므로 dummy ID면 에러가 날 수 있습니다.
   // 에러를 피하기 위해 tour_id를 널 허용으로 바꿨다고 가정하거나, 그냥 넣습니다.
   let tourId: number | null = null;
+  let tourPrice = 0;
+  
   if (!tourIdStr.startsWith('dummy-')) {
     tourId = parseInt(tourIdStr, 10);
+    // 투어의 정가(판매자 지정 가격) 조회
+    const { data: tourData } = await supabase
+      .from('tours')
+      .select('price')
+      .eq('id', tourId)
+      .single();
+      
+    if (tourData) {
+      tourPrice = tourData.price;
+    }
   }
+
+  // 판매자가 정한 가격보다 입찰가가 높거나 같으면 바로 승인 (accepted)
+  const initialStatus = (tourPrice > 0 && bidPrice >= tourPrice) ? 'accepted' : 'pending';
 
   const { error } = await supabase.from('bidding_requests').insert([{
     tour_id: tourId,
@@ -26,7 +41,7 @@ export async function submitBid(formData: FormData) {
     bid_date: date,
     bid_time: timeSlot,
     bid_price: bidPrice,
-    status: 'pending'
+    status: initialStatus
   }]);
 
   if (error) {
