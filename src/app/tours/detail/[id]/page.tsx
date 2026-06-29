@@ -116,8 +116,8 @@ export default async function TourDetailPage({ params }: { params: Promise<{ id:
         
         <div className={styles.infoSection}>
           <div 
-            className={styles.price} 
-            title={`약 $${(tour.timePrices['10:00'] / krwRate).toFixed(2)} ~ $${(tour.timePrices['20:00'] / krwRate).toFixed(2)}`}
+            className={`${styles.price} tooltip-container`} 
+            data-tooltip={`약 $${(tour.timePrices['10:00'] / krwRate).toFixed(2)} ~ $${(tour.timePrices['20:00'] / krwRate).toFixed(2)}`}
           >
             ₩ {formatPrice(tour.timePrices['10:00'])} ~ {formatPrice(tour.timePrices['20:00'])} <span style={{fontSize: '1rem', color: '#888', fontWeight: 'normal'}}>시간별 차등 정가</span>
           </div>

@@ -83,7 +83,7 @@ export default async function ToursPage() {
                     <p className={styles.cardDesc}>{tour.description}</p>
                     <div className={styles.cardFooter}>
                       <span className={styles.duration}>⏱ {tour.duration}</span>
-                      <span className={styles.price} title={`약 $${(parseInt(tour.price.replace(/,/g, ''), 10) / krwRate).toFixed(2)}`}>₩ {tour.price}</span>
+                      <span className={`${styles.price} tooltip-container`} data-tooltip={`약 $${(parseInt(tour.price.replace(/,/g, ''), 10) / krwRate).toFixed(2)}`}>₩ {tour.price}</span>
                     </div>
                   </div>
                 </Link>
