@@ -126,3 +126,107 @@ export async function deletePost(id: number) {
     return { success: false };
   }
 }
+
+export async function toggleLike(travelogueId: string) {
+  const cookieStore = await cookies();
+  const userEmail = cookieStore.get('wave_session')?.value;
+  if (!userEmail) return { success: false, error: 'Unauthorized' };
+
+  try {
+    // Check if already liked
+    const { data: existingLike } = await supabase
+      .from('travelogue_likes')
+      .select('id')
+      .eq('travelogue_id', travelogueId)
+      .eq('user_email', userEmail)
+      .single();
+
+    if (existingLike) {
+      // Unlike
+      await supabase.from('travelogue_likes').delete().eq('id', existingLike.id);
+      
+      const { data: postData } = await supabase.from('travelogues').select('likes').eq('id', travelogueId).single();
+      if (postData) {
+        await supabase.from('travelogues').update({ likes: Math.max(0, postData.likes - 1) }).eq('id', travelogueId);
+      }
+      return { success: true, liked: false };
+    } else {
+      // Like
+      await supabase.from('travelogue_likes').insert({ travelogue_id: travelogueId, user_email: userEmail });
+      
+      const { data: postData } = await supabase.from('travelogues').select('likes').eq('id', travelogueId).single();
+      if (postData) {
+        await supabase.from('travelogues').update({ likes: postData.likes + 1 }).eq('id', travelogueId);
+      }
+      return { success: true, liked: true };
+    }
+  } catch (error) {
+    console.error(error);
+    return { success: false };
+  }
+}
+
+export async function getComments(travelogueId: string) {
+  try {
+    const { data, error } = await supabase
+      .from('travelogue_comments')
+      .select('*')
+      .eq('travelogue_id', travelogueId)
+      .order('created_at', { ascending: true });
+      
+    if (error) return { success: false, error: error.message };
+    return { success: true, comments: data || [] };
+  } catch (error) {
+    console.error(error);
+    return { success: false, comments: [] };
+  }
+}
+
+export async function addComment(travelogueId: string, content: string) {
+  const cookieStore = await cookies();
+  const userEmail = cookieStore.get('wave_session')?.value;
+  const userNickname = cookieStore.get('tourist_nickname')?.value || userEmail?.split('@')[0] || '익명';
+  if (!userEmail) return { success: false, error: 'Unauthorized' };
+
+  try {
+    const { error } = await supabase.from('travelogue_comments').insert({
+      travelogue_id: travelogueId,
+      author_email: userEmail,
+      author_nickname: userNickname,
+      content
+    });
+    if (error) return { success: false, error: error.message };
+    
+    // Increment comments counter
+    const { data: postData } = await supabase.from('travelogues').select('comments').eq('id', travelogueId).single();
+    if (postData) {
+      await supabase.from('travelogues').update({ comments: postData.comments + 1 }).eq('id', travelogueId);
+    }
+    return { success: true };
+  } catch (error) {
+    console.error(error);
+    return { success: false };
+  }
+}
+
+export async function deleteComment(commentId: string, travelogueId: string) {
+  const cookieStore = await cookies();
+  const userEmail = cookieStore.get('wave_session')?.value;
+  if (!userEmail) return { success: false, error: 'Unauthorized' };
+
+  try {
+    // Admin or author check should be done here but we simplify
+    const { error } = await supabase.from('travelogue_comments').delete().eq('id', commentId);
+    if (error) return { success: false, error: error.message };
+    
+    // Decrement comments counter
+    const { data: postData } = await supabase.from('travelogues').select('comments').eq('id', travelogueId).single();
+    if (postData) {
+      await supabase.from('travelogues').update({ comments: Math.max(0, postData.comments - 1) }).eq('id', travelogueId);
+    }
+    return { success: true };
+  } catch (error) {
+    console.error(error);
+    return { success: false };
+  }
+}

@@ -2,7 +2,7 @@
 
 import { useState, useTransition, useEffect } from 'react';
 import Image from 'next/image';
-import { createPost, updatePost, deletePost } from './actions';
+import { createPost, updatePost, deletePost, toggleLike, getComments, addComment, deleteComment } from './actions';
 import { supabase } from '@/utils/supabase';
 import styles from './page.module.css';
 
@@ -14,6 +14,10 @@ export default function TravelogueClient({ currentUserEmail, currentUserNickname
   const [isPending, startTransition] = useTransition();
   const [expandedPosts, setExpandedPosts] = useState<Record<string, boolean>>({});
   const [previewImages, setPreviewImages] = useState<string[]>([]);
+  const [likedPosts, setLikedPosts] = useState<Record<string, boolean>>({});
+  const [activeCommentPostId, setActiveCommentPostId] = useState<string | null>(null);
+  const [commentsData, setCommentsData] = useState<Record<string, any[]>>({});
+  const [commentInput, setCommentInput] = useState('');
   const MAX_IMAGES = 9;
 
   const toggleExpand = (id: string) => {
@@ -69,19 +73,28 @@ export default function TravelogueClient({ currentUserEmail, currentUserNickname
               imageUrl: parsedImages[0],
               imageUrls: parsedImages,
               content: cleanContent,
-              likes: 0,
-              comments: 0
+              likes: dbPost.likes_count || 0,
+              comments: dbPost.comments_count || 0
             };
           });
 
           setPosts(dbPosts);
+
+          if (currentUserEmail) {
+            const { data: likesData } = await supabase.from('travelogue_likes').select('travelogue_id').eq('user_email', currentUserEmail);
+            if (likesData) {
+              const likesMap: Record<string, boolean> = {};
+              likesData.forEach((l: any) => likesMap[l.travelogue_id] = true);
+              setLikedPosts(likesMap);
+            }
+          }
         }
-      } catch (err) {
-        console.error('Error fetching travelogues', err);
+      } catch (e) {
+        console.error(e);
       }
     }
     fetchPosts();
-  }, []);
+  }, [currentUserEmail]);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(e.target.files || []);
@@ -161,11 +174,81 @@ export default function TravelogueClient({ currentUserEmail, currentUserNickname
 
   const handleDelete = async (id: number) => {
     if (confirm('정말로 이 글을 삭제하시겠습니까?')) {
-      const res = await deletePost(id);
+      startTransition(async () => {
+        const res = await deletePost(id);
+        if (res.success) {
+          setPosts(prev => prev.filter(p => p.id !== id));
+        } else {
+          alert('삭제 실패: ' + res.error);
+        }
+      });
+    }
+  };
+
+  const handleLike = async (post: any) => {
+    if (!currentUserEmail) {
+      alert('로그인이 필요합니다.');
+      return;
+    }
+    
+    const isLiked = likedPosts[post.id];
+    setLikedPosts(prev => ({ ...prev, [post.id]: !isLiked }));
+    setPosts(prev => prev.map(p => p.id === post.id ? { ...p, likes: p.likes + (isLiked ? -1 : 1) } : p));
+
+    const res = await toggleLike(post.id);
+    if (!res.success) {
+      setLikedPosts(prev => ({ ...prev, [post.id]: isLiked }));
+      setPosts(prev => prev.map(p => p.id === post.id ? { ...p, likes: p.likes + (isLiked ? 1 : -1) } : p));
+      alert('좋아요 처리에 실패했습니다.');
+    }
+  };
+
+  const handleToggleComments = async (post: any) => {
+    if (activeCommentPostId === post.id) {
+      setActiveCommentPostId(null);
+      return;
+    }
+    setActiveCommentPostId(post.id);
+    if (!commentsData[post.id]) {
+      const res = await getComments(post.id);
       if (res.success) {
-         setPosts(prev => prev.filter(p => p.id !== id));
+        setCommentsData(prev => ({ ...prev, [post.id]: res.comments }));
+      }
+    }
+  };
+
+  const handleCommentSubmit = async (e: React.FormEvent, postId: string) => {
+    e.preventDefault();
+    if (!currentUserEmail) {
+      alert('로그인이 필요합니다.');
+      return;
+    }
+    if (!commentInput.trim()) return;
+
+    const content = commentInput;
+    setCommentInput('');
+
+    const res = await addComment(postId, content);
+    if (res.success) {
+      const updatedComments = await getComments(postId);
+      if (updatedComments.success) {
+        setCommentsData(prev => ({ ...prev, [postId]: updatedComments.comments }));
+        setPosts(prev => prev.map(p => p.id === postId ? { ...p, comments: p.comments + 1 } : p));
+      }
+    } else {
+      alert('댓글 등록에 실패했습니다.');
+      setCommentInput(content);
+    }
+  };
+
+  const handleCommentDelete = async (commentId: string, postId: string) => {
+    if (confirm('댓글을 삭제하시겠습니까?')) {
+      const res = await deleteComment(commentId, postId);
+      if (res.success) {
+        setCommentsData(prev => ({ ...prev, [postId]: prev[postId].filter(c => c.id !== commentId) }));
+        setPosts(prev => prev.map(p => p.id === postId ? { ...p, comments: p.comments - 1 } : p));
       } else {
-         alert('삭제에 실패했습니다.');
+        alert('삭제 실패');
       }
     }
   };
@@ -253,11 +336,58 @@ export default function TravelogueClient({ currentUserEmail, currentUserNickname
 
               <div className={styles.postFooter}>
                 <div className={styles.actionIcons}>
-                  <button className={styles.iconBtn}>🤍 {post.likes}</button>
-                  <button className={styles.iconBtn}>💬 {post.comments}</button>
+                  <button 
+                    className={`${styles.iconBtn} ${likedPosts[post.id] ? styles.liked : ''}`} 
+                    onClick={() => handleLike(post)}
+                  >
+                    {likedPosts[post.id] ? '❤️' : '🤍'} {post.likes}
+                  </button>
+                  <button 
+                    className={styles.iconBtn}
+                    onClick={() => handleToggleComments(post)}
+                  >
+                    💬 {post.comments}
+                  </button>
                 </div>
                 <button className={styles.iconBtn}>🔗 공유</button>
               </div>
+
+              {activeCommentPostId === post.id && (
+                <div className={styles.commentSection}>
+                  <div className={styles.commentList}>
+                    {(commentsData[post.id] || []).map((comment: any) => (
+                      <div key={comment.id} className={styles.commentItem}>
+                        <div className={styles.commentHeader}>
+                          <span className={styles.commentAuthor}>{comment.author_nickname}</span>
+                          <span className={styles.commentTime}>{new Date(comment.created_at).toLocaleDateString()}</span>
+                        </div>
+                        <div className={styles.commentBody}>{comment.content}</div>
+                        {(currentUserEmail === comment.author_email || currentUserEmail === 'admin@admin.com') && (
+                          <button 
+                            onClick={() => handleCommentDelete(comment.id, post.id)} 
+                            className={styles.commentDeleteBtn}
+                          >
+                            삭제
+                          </button>
+                        )}
+                      </div>
+                    ))}
+                    {(commentsData[post.id] || []).length === 0 && (
+                      <div style={{ color: '#888', fontSize: '0.9rem', padding: '1rem 0' }}>아직 댓글이 없습니다.</div>
+                    )}
+                  </div>
+                  <form onSubmit={(e) => handleCommentSubmit(e, post.id)} className={styles.commentForm}>
+                    <input 
+                      type="text" 
+                      value={commentInput}
+                      onChange={(e) => setCommentInput(e.target.value)}
+                      placeholder="댓글 달기..." 
+                      className={styles.commentInput}
+                    />
+                    <button type="submit" className={styles.commentSubmitBtn} disabled={!commentInput.trim() || isPending}>게시</button>
+                  </form>
+                </div>
+              )}
             </article>
           ))}
           

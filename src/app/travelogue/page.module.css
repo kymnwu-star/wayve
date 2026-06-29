@@ -379,6 +379,113 @@
   z-index: 10;
 }
 
+.moreImagesOverlay {
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.liked {
+  color: #ff5555 !important;
+}
+
+.commentSection {
+  padding: 1rem 1.2rem;
+  background: rgba(0, 0, 0, 0.2);
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.commentList {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.commentItem {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  position: relative;
+}
+
+.commentHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.commentAuthor {
+  font-weight: bold;
+  font-size: 0.9rem;
+  color: #d4ff00;
+}
+
+.commentTime {
+  font-size: 0.75rem;
+  color: #888;
+}
+
+.commentBody {
+  font-size: 0.9rem;
+  color: #ddd;
+  line-height: 1.4;
+}
+
+.commentDeleteBtn {
+  position: absolute;
+  top: 0;
+  right: 0;
+  background: transparent;
+  border: none;
+  color: #ff5555;
+  font-size: 0.8rem;
+  cursor: pointer;
+  padding: 0 0.5rem;
+}
+
+.commentForm {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.commentInput {
+  flex-grow: 1;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  padding: 0.6rem 1rem;
+  border-radius: 20px;
+  color: white;
+  font-size: 0.9rem;
+}
+
+.commentInput:focus {
+  outline: none;
+  border-color: #d4ff00;
+}
+
+.commentSubmitBtn {
+  background: #d4ff00;
+  color: black;
+  border: none;
+  padding: 0 1.2rem;
+  border-radius: 20px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.commentSubmitBtn:disabled {
+  background: #555;
+  color: #888;
+  cursor: not-allowed;
+}
+
 .postImageSlider {
   display: flex;
   overflow-x: auto;
