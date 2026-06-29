@@ -61,6 +61,7 @@ export default async function Home() {
               <p>프리미엄 호텔부터 감성 넘치는 로컬 숙소까지 완벽한 휴식.</p>
             </div>
           </div>
+        </div>
         <div className={styles.heroRightContent}>
           <div className={styles.magazineLabel}>Latest in Magazine</div>
           <Link href="/magazine" className={styles.magazineCard}>
