@@ -55,6 +55,17 @@ export default async function TourDetailPage({ params }: { params: Promise<{ id:
           }
         }
 
+        let location = null;
+        if (cleanDescription.includes('<!--LOCATION:')) {
+          const match = cleanDescription.match(/<!--LOCATION:(.*)-->/);
+          if (match) {
+            try {
+              location = JSON.parse(match[1]);
+              cleanDescription = cleanDescription.replace(/<!--LOCATION:.*-->/, '').trim();
+            } catch(e) {}
+          }
+        }
+
         tour = {
           id: data.id.toString(),
           category: data.category || 'Night Exploration',
@@ -64,6 +75,7 @@ export default async function TourDetailPage({ params }: { params: Promise<{ id:
           price: formatPrice(data.price),
           priceNum: data.price,
           timePrices: timePrices,
+          location: location,
           duration: data.duration || '2시간',
           imageUrl: data.image_url || 'https://images.unsplash.com/photo-1512453979798-5ea266f8880c?q=80&w=800'
         };
@@ -101,8 +113,16 @@ export default async function TourDetailPage({ params }: { params: Promise<{ id:
             <div className={styles.metaItem}>⏱ <span>소요 시간: {tour.duration}</span></div>
           </div>
 
-          {/* 투어 위치 지도 (기본값: 부산 해운대 좌표) */}
-          <KakaoMap />
+          <div style={{ marginTop: '2rem' }}>
+            <h3 style={{ fontSize: '1.2rem', marginBottom: '0.5rem', color: 'var(--accent)' }}>📍 오시는 길</h3>
+            {tour.location && tour.location.address && (
+              <p style={{ fontSize: '0.9rem', color: '#ccc', marginBottom: '1rem' }}>{tour.location.address}</p>
+            )}
+            <KakaoMap 
+              latitude={tour.location?.lat} 
+              longitude={tour.location?.lng} 
+            />
+          </div>
 
           <div className={styles.biddingContainer}>
             <BiddingSection tourId={tour.id} timePrices={tour.timePrices} />

@@ -35,8 +35,16 @@ export async function createTour(formData: FormData) {
   const maxCapacity = formData.get('maxCapacity') as string;
   const category = formData.get('category') as string;
   const imageUrl = formData.get('imageUrl') as string;
+  const address = formData.get('address') as string;
+  const latitude = parseFloat(formData.get('latitude') as string);
+  const longitude = parseFloat(formData.get('longitude') as string);
 
-  const fullDescription = description + `\n\n<!--TIME_PRICES:${JSON.stringify(time_prices)}-->`;
+  const locationInfo = address ? { lat: latitude, lng: longitude, address } : null;
+
+  let fullDescription = description + `\n\n<!--TIME_PRICES:${JSON.stringify(time_prices)}-->`;
+  if (locationInfo) {
+    fullDescription += `\n<!--LOCATION:${JSON.stringify(locationInfo)}-->`;
+  }
 
   try {
     const { error } = await supabase.from('tours').insert([{

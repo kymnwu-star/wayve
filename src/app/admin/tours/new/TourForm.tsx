@@ -1,6 +1,7 @@
 'use client';
 
-import { useTransition, useState, useRef } from 'react';
+import { useTransition, useState, useRef, useEffect } from 'react';
+import Script from 'next/script';
 import styles from './page.module.css';
 import { createTour } from './actions';
 import { analyzeImage, analyzeImageFile } from './ai-actions';
@@ -21,8 +22,13 @@ export default function TourForm() {
     duration: '',
     maxCapacity: '',
     category: '',
-    imageUrl: ''
+    imageUrl: '',
+    address: '',
+    latitude: 35.1595454,
+    longitude: 129.1625985
   });
+
+  const [isKakaoLoaded, setIsKakaoLoaded] = useState(false);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
@@ -132,8 +138,12 @@ export default function TourForm() {
     
     if (form.checkValidity()) {
       startTransition(() => {
-        createTour(new FormData(form));
-        setFormData({ title: '', description: '', price_10: '', price_14: '', price_18: '', price_20: '', duration: '', maxCapacity: '', category: '', imageUrl: '' });
+        const dataToSubmit = new FormData(form);
+        dataToSubmit.append('address', formData.address);
+        dataToSubmit.append('latitude', formData.latitude.toString());
+        dataToSubmit.append('longitude', formData.longitude.toString());
+        createTour(dataToSubmit);
+        setFormData({ title: '', description: '', price_10: '', price_14: '', price_18: '', price_20: '', duration: '', maxCapacity: '', category: '', imageUrl: '', address: '', latitude: 35.1595454, longitude: 129.1625985 });
         setSelectedFile(null);
         if (fileInputRef.current) fileInputRef.current.value = '';
       });
@@ -142,8 +152,36 @@ export default function TourForm() {
     }
   };
 
+  const handleAddressSearch = () => {
+    if (!formData.address) return;
+    if (!isKakaoLoaded || !window.kakao || !window.kakao.maps || !window.kakao.maps.services) {
+      alert('카카오맵 주소 검색 서비스가 아직 로드되지 않았습니다.');
+      return;
+    }
+    
+    window.kakao.maps.load(() => {
+      const geocoder = new window.kakao.maps.services.Geocoder();
+      geocoder.addressSearch(formData.address, function(result: any, status: any) {
+        if (status === window.kakao.maps.services.Status.OK) {
+          const lat = parseFloat(result[0].y);
+          const lng = parseFloat(result[0].x);
+          setFormData(prev => ({ ...prev, latitude: lat, longitude: lng }));
+          alert(`좌표 변환 성공: ${lat}, ${lng}`);
+        } else {
+          alert('주소를 찾을 수 없습니다. 정확한 도로명/지번 주소를 입력해 주세요.');
+        }
+      });
+    });
+  };
+
   return (
-    <form className={styles.form} onSubmit={handleSubmit}>
+    <>
+      <Script
+        strategy="lazyOnload"
+        src={`//dapi.kakao.com/v2/maps/sdk.js?appkey=7ff26c6aeb4799e58f60679f26fa69b7&autoload=false&libraries=services`}
+        onLoad={() => setIsKakaoLoaded(true)}
+      />
+      <form className={styles.form} onSubmit={handleSubmit}>
       <div className={styles.inputGroup} style={{ backgroundColor: 'rgba(255,255,255,0.02)', padding: '1.5rem', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.1)' }}>
         <h3 style={{ marginBottom: '1rem', color: 'var(--accent)' }}>✨ AI 자동완성 (사진 첨부)</h3>
         
@@ -249,11 +287,35 @@ export default function TourForm() {
         </select>
       </div>
       
+      <div className={styles.inputGroup}>
+        <label htmlFor="address">투어 집결지 / 주소 (카카오맵 연동)</label>
+        <div style={{ display: 'flex', gap: '0.5rem' }}>
+          <input 
+            id="address" 
+            name="address" 
+            type="text" 
+            placeholder="예: 부산광역시 영도구 대평북로 36" 
+            value={formData.address} 
+            onChange={handleChange} 
+            style={{ flex: 1 }}
+          />
+          <button type="button" onClick={handleAddressSearch} style={{ padding: '0 1rem', background: 'var(--accent)', color: '#000', border: 'none', borderRadius: '4px', cursor: 'pointer', fontWeight: 'bold' }}>
+            위치 찾기
+          </button>
+        </div>
+        {formData.address && (
+          <p style={{fontSize: '0.8rem', color: '#888', marginTop: '0.5rem'}}>
+            변환된 좌표: {formData.latitude}, {formData.longitude} (위치 찾기 버튼을 눌러 정확한 좌표로 변환하세요)
+          </p>
+        )}
+      </div>
+
       <div className={styles.actions}>
-        <button type="submit" disabled={isPending} className={styles.btnSubmit}>
-          {isPending ? 'Registering...' : 'Register Tour'}
+        <button type="submit" className={styles.submitBtn} disabled={isPending}>
+          {isPending ? '등록 중...' : '투어 등록하기'}
         </button>
       </div>
     </form>
+    </>
   );
 }

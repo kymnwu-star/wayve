@@ -42,7 +42,7 @@ export default function KakaoMap({ latitude = 35.1595454, longitude = 129.162598
     <>
       <Script
         strategy="afterInteractive"
-        src={`//dapi.kakao.com/v2/maps/sdk.js?appkey=7ff26c6aeb4799e58f60679f26fa69b7&autoload=false`}
+        src={`//dapi.kakao.com/v2/maps/sdk.js?appkey=7ff26c6aeb4799e58f60679f26fa69b7&autoload=false&libraries=services`}
         onLoad={() => setIsLoaded(true)}
       />
       <div 
