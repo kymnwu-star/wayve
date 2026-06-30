@@ -151,32 +151,7 @@ export default async function PartnerDashboard() {
       </div>
 
       {/* Floating Add Product Button */}
-      <Link href="/partner/products/new" style={{
-        position: 'fixed',
-        bottom: '5.5rem',
-        right: '2rem',
-        backgroundColor: 'var(--accent)',
-        color: 'black',
-        padding: '0.8rem 1.2rem',
-        borderRadius: '50px',
-        fontWeight: 'bold',
-        textDecoration: 'none',
-        boxShadow: '0 4px 12px rgba(204, 255, 0, 0.4)',
-        zIndex: 998,
-        display: 'flex',
-        alignItems: 'center',
-        gap: '0.5rem',
-        transition: 'all 0.3s ease'
-      }}
-      onMouseEnter={(e) => {
-        e.currentTarget.style.transform = 'translateY(-3px)';
-        e.currentTarget.style.boxShadow = '0 6px 16px rgba(204, 255, 0, 0.6)';
-      }}
-      onMouseLeave={(e) => {
-        e.currentTarget.style.transform = 'translateY(0)';
-        e.currentTarget.style.boxShadow = '0 4px 12px rgba(204, 255, 0, 0.4)';
-      }}
-      >
+      <Link href="/admin/tours/new" className={styles.floatingAddBtn}>
         <span>+</span> 상품 등록
       </Link>
     </main>
