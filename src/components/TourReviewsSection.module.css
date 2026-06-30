@@ -1,0 +1,146 @@
+.container {
+  margin-top: 3rem;
+  padding-top: 2rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.heading {
+  font-size: 1.5rem;
+  margin-bottom: 1.5rem;
+  color: var(--accent);
+}
+
+.average {
+  font-size: 1.2rem;
+  color: #ccc;
+  font-weight: normal;
+}
+
+.formContainer {
+  background: rgba(255, 255, 255, 0.05);
+  padding: 1.5rem;
+  border-radius: 12px;
+  margin-bottom: 2rem;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.starRating {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.star {
+  background: transparent;
+  border: none;
+  font-size: 1.8rem;
+  color: #555;
+  cursor: pointer;
+  padding: 0;
+  transition: color 0.2s;
+}
+
+.starActive {
+  color: #ffaa00;
+}
+
+.inputGroup {
+  display: flex;
+  gap: 0.8rem;
+}
+
+.input {
+  flex-grow: 1;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  padding: 0.8rem 1rem;
+  border-radius: 8px;
+  color: white;
+  font-size: 1rem;
+}
+
+.input:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+
+.submitBtn {
+  background: var(--accent);
+  color: black;
+  border: none;
+  padding: 0 1.5rem;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.submitBtn:disabled {
+  background: #555;
+  color: #888;
+  cursor: not-allowed;
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.reviewItem {
+  background: rgba(255, 255, 255, 0.02);
+  padding: 1.2rem;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  position: relative;
+}
+
+.reviewHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.authorInfo {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+}
+
+.author {
+  font-weight: bold;
+  color: white;
+}
+
+.stars {
+  color: #ffaa00;
+  font-size: 0.9rem;
+}
+
+.time {
+  font-size: 0.8rem;
+  color: #888;
+}
+
+.content {
+  color: #ddd;
+  line-height: 1.5;
+  font-size: 0.95rem;
+}
+
+.deleteBtn {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: transparent;
+  border: none;
+  color: #ff5555;
+  font-size: 0.8rem;
+  cursor: pointer;
+  padding: 0.2rem;
+}

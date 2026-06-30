@@ -5,6 +5,8 @@ import { supabase } from '@/utils/supabase';
 import styles from './page.module.css';
 import BiddingSection from '@/components/BiddingSection';
 import KakaoMap from '@/components/KakaoMap';
+import TourReviewsSection from '@/components/TourReviewsSection';
+import { cookies } from 'next/headers';
 
 // Helper for formatting DB prices
 function formatPrice(price: number | string | null | undefined): string {
@@ -98,6 +100,9 @@ export default async function TourDetailPage({ params }: { params: Promise<{ id:
     notFound();
   }
 
+  const cookieStore = await cookies();
+  const currentUserEmail = cookieStore.get('wave_session')?.value || null;
+
   return (
     <main className={styles.main}>
       <div className={styles.category}>{tour.icon} {tour.category}</div>
@@ -141,6 +146,8 @@ export default async function TourDetailPage({ params }: { params: Promise<{ id:
           <div className={styles.biddingContainer}>
             <BiddingSection tourId={tour.id} timePrices={tour.timePrices} />
           </div>
+          
+          <TourReviewsSection tourId={tour.id} currentUserEmail={currentUserEmail} />
         </div>
       </div>
     </main>
