@@ -86,9 +86,6 @@ export default async function PartnerDashboard() {
             <h1 className={styles.title}>Partner Dashboard</h1>
             <p className={styles.subtitle}>웨이브와 함께 성장하는 파트너, 환영합니다.</p>
           </div>
-          <Link href="/partner/products/new" className={styles.addProductBtn}>
-            + 새 상품 등록
-          </Link>
         </div>
 
         <div className={styles.dashboardGrid}>
@@ -152,6 +149,36 @@ export default async function PartnerDashboard() {
           </div>
         </div>
       </div>
+
+      {/* Floating Add Product Button */}
+      <Link href="/partner/products/new" style={{
+        position: 'fixed',
+        bottom: '5.5rem',
+        right: '2rem',
+        backgroundColor: 'var(--accent)',
+        color: 'black',
+        padding: '0.8rem 1.2rem',
+        borderRadius: '50px',
+        fontWeight: 'bold',
+        textDecoration: 'none',
+        boxShadow: '0 4px 12px rgba(204, 255, 0, 0.4)',
+        zIndex: 998,
+        display: 'flex',
+        alignItems: 'center',
+        gap: '0.5rem',
+        transition: 'all 0.3s ease'
+      }}
+      onMouseEnter={(e) => {
+        e.currentTarget.style.transform = 'translateY(-3px)';
+        e.currentTarget.style.boxShadow = '0 6px 16px rgba(204, 255, 0, 0.6)';
+      }}
+      onMouseLeave={(e) => {
+        e.currentTarget.style.transform = 'translateY(0)';
+        e.currentTarget.style.boxShadow = '0 4px 12px rgba(204, 255, 0, 0.4)';
+      }}
+      >
+        <span>+</span> 상품 등록
+      </Link>
     </main>
   );
 }

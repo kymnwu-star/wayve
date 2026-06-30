@@ -11,14 +11,11 @@ export default function TourForm() {
   const [isAILoading, setIsAILoading] = useState(false);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const [timePrices, setTimePrices] = useState<{time: string, price: string}[]>([{ time: '10:00', price: '' }]);
 
   const [formData, setFormData] = useState({
     title: '',
     description: '',
-    price_10: '',
-    price_14: '',
-    price_18: '',
-    price_20: '',
     duration: '',
     maxCapacity: '',
     category: '',
@@ -131,14 +128,13 @@ export default function TourForm() {
           ...prev,
           title: parsedResult.data.title || prev.title,
           description: parsedResult.data.description || prev.description,
-          price_10: parsedResult.data.price_10 || prev.price_10,
-          price_14: parsedResult.data.price_14 || prev.price_14,
-          price_18: parsedResult.data.price_18 || prev.price_18,
-          price_20: parsedResult.data.price_20 || prev.price_20,
           duration: parsedResult.data.duration || prev.duration,
           maxCapacity: parsedResult.data.maxCapacity || prev.maxCapacity,
           category: parsedResult.data.category || prev.category
         }));
+        if (parsedResult.data.price_10) {
+          setTimePrices([{ time: '10:00', price: parsedResult.data.price_10 }]);
+        }
       } else {
         alert(parsedResult.error || 'AI 분석에 실패했습니다.');
       }
@@ -155,13 +151,26 @@ export default function TourForm() {
     const form = e.currentTarget;
     
     if (form.checkValidity()) {
+      if (timePrices.length === 0 || timePrices.some(tp => !tp.time || !tp.price)) {
+        alert('시간대와 가격을 모두 입력해주세요.');
+        return;
+      }
+      
       startTransition(() => {
         const dataToSubmit = new FormData(form);
         dataToSubmit.append('address', formData.address);
         dataToSubmit.append('latitude', formData.latitude.toString());
         dataToSubmit.append('longitude', formData.longitude.toString());
+        
+        const timePricesObj: Record<string, number> = {};
+        timePrices.forEach(tp => {
+          timePricesObj[tp.time] = parseInt(tp.price, 10);
+        });
+        dataToSubmit.append('timePricesJSON', JSON.stringify(timePricesObj));
+        
         createTour(dataToSubmit);
-        setFormData({ title: '', description: '', price_10: '', price_14: '', price_18: '', price_20: '', duration: '', maxCapacity: '', category: '', imageUrl: '', address: '', latitude: 35.1595454, longitude: 129.1625985 });
+        setFormData({ title: '', description: '', duration: '', maxCapacity: '', category: '', imageUrl: '', address: '', latitude: 35.1595454, longitude: 129.1625985 });
+        setTimePrices([{ time: '10:00', price: '' }]);
         setSelectedFile(null);
         if (fileInputRef.current) fileInputRef.current.value = '';
       });
@@ -258,24 +267,49 @@ export default function TourForm() {
       </div>
 
       <div className={styles.inputGroup}>
-        <label>기준 가격 (KRW) - 시간대별 설정</label>
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
-          <div>
-            <label style={{fontSize: '0.8rem', color: '#ccc'}}>오전 10:00</label>
-            <input name="price_10" type="number" required placeholder="예: 50000" value={formData.price_10} onChange={handleChange} />
-          </div>
-          <div>
-            <label style={{fontSize: '0.8rem', color: '#ccc'}}>오후 2:00</label>
-            <input name="price_14" type="number" required placeholder="예: 50000" value={formData.price_14} onChange={handleChange} />
-          </div>
-          <div>
-            <label style={{fontSize: '0.8rem', color: '#ccc'}}>오후 6:00</label>
-            <input name="price_18" type="number" required placeholder="예: 60000" value={formData.price_18} onChange={handleChange} />
-          </div>
-          <div>
-            <label style={{fontSize: '0.8rem', color: '#ccc'}}>오후 8:00 (심야)</label>
-            <input name="price_20" type="number" required placeholder="예: 65000" value={formData.price_20} onChange={handleChange} />
-          </div>
+        <label>시간대별 가격 설정 (24시간 자유 선택)</label>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+          {timePrices.map((tp, idx) => (
+            <div key={idx} style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
+              <input 
+                type="time" 
+                required 
+                value={tp.time} 
+                onChange={(e) => {
+                  const newTp = [...timePrices];
+                  newTp[idx].time = e.target.value;
+                  setTimePrices(newTp);
+                }} 
+                style={{ flex: 1, padding: '0.8rem', borderRadius: '6px', backgroundColor: 'var(--surface)', color: 'white', border: '1px solid var(--surface-border)' }}
+              />
+              <input 
+                type="number" 
+                required 
+                placeholder="가격 (예: 50000)" 
+                value={tp.price} 
+                onChange={(e) => {
+                  const newTp = [...timePrices];
+                  newTp[idx].price = e.target.value;
+                  setTimePrices(newTp);
+                }} 
+                style={{ flex: 2, padding: '0.8rem', borderRadius: '6px', backgroundColor: 'var(--surface)', color: 'white', border: '1px solid var(--surface-border)' }}
+              />
+              <button 
+                type="button" 
+                onClick={() => setTimePrices(prev => prev.filter((_, i) => i !== idx))}
+                style={{ background: 'transparent', border: 'none', color: '#ff5555', cursor: 'pointer', fontSize: '1.2rem', padding: '0 0.5rem' }}
+              >
+                ✕
+              </button>
+            </div>
+          ))}
+          <button 
+            type="button" 
+            onClick={() => setTimePrices(prev => [...prev, { time: '', price: '' }])}
+            style={{ background: 'transparent', border: '1px dashed var(--accent)', color: 'var(--accent)', padding: '0.8rem', borderRadius: '6px', cursor: 'pointer', textAlign: 'center' }}
+          >
+            + 시간대 추가
+          </button>
         </div>
       </div>
 

@@ -17,19 +17,20 @@ export async function createTour(formData: FormData) {
   // 2. 폼 데이터 추출
   const title = formData.get('title') as string;
   const description = formData.get('description') as string;
-  const price_10 = parseInt(formData.get('price_10') as string, 10);
-  const price_14 = parseInt(formData.get('price_14') as string, 10);
-  const price_18 = parseInt(formData.get('price_18') as string, 10);
-  const price_20 = parseInt(formData.get('price_20') as string, 10);
+  const timePricesJSON = formData.get('timePricesJSON') as string;
   
-  const time_prices = {
-    '10:00': price_10,
-    '14:00': price_14,
-    '18:00': price_18,
-    '20:00': price_20
-  };
-  
-  const basePrice = Math.min(price_10, price_14, price_18, price_20);
+  let time_prices: Record<string, number> = {};
+  let basePrice = 0;
+  try {
+    const parsed = JSON.parse(timePricesJSON);
+    time_prices = parsed;
+    const prices = Object.values(parsed).map(Number);
+    if (prices.length > 0) {
+      basePrice = Math.min(...prices);
+    }
+  } catch (e) {
+    console.error('Failed to parse timePricesJSON', e);
+  }
 
   const duration = formData.get('duration') as string;
   const maxCapacity = formData.get('maxCapacity') as string;
